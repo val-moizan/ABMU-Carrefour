@@ -59,7 +59,7 @@ public class Controller : AbstractController
             Vector3 point = GetRandomPointInObject(random, carPrefab);
             nmAgent.Warp(point);
             car.transform.position = nmAgent.nextPosition;
-            car.GetComponent<AgentNavigation>().Init();
+            car.GetComponent<CarNavigation>().Init();
         }
     }
 

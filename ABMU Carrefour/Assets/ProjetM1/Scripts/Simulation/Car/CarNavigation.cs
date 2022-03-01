@@ -16,24 +16,24 @@ public class CarNavigation : AbstractAgent
 
     int timeSpentSitting = 0;
     int stationayrDuration = -1;
-
-    public void Init(GameObject _targetObject){
+    
+    public override void Init(){
         base.Init();
         nCont = GameObject.FindObjectOfType<Controller>();
         nmAgent = GetComponent<NavMeshAgent>();
-
-        SetNMAgentProperties();
+        Debug.Log("car");
+        CreateStepper(CheckDistToTarget, 1, 100);
         SetupStationary();
     }
+    
 
     public void SetTarget(GameObject obj){
         targetObject = obj;
         target = nCont.GetRandomPointInObject(targetObject, nCont.carPrefab);
         nmAgent.SetDestination(target);
         nmAgent.isStopped = false;
-
+        
         CreateStepper(CheckDistToTarget, 1, 100);
-        CreateStepper(Move, 1, 105);
     }
 
     void CheckDistToTarget(){
@@ -53,15 +53,9 @@ public class CarNavigation : AbstractAgent
         }
     }
 
-    void Move(){
-        nmAgent.velocity = Vector3.zero;
-        nmAgent.nextPosition = this.transform.position + nmAgent.desiredVelocity*0.03f;
-        transform.LookAt(nmAgent.nextPosition, Vector3.up);
-        transform.position =  nmAgent.nextPosition;
-    }
     
     void SetupStationary(){
-        stationayrDuration = Random.Range(50,1000);
+        stationayrDuration = Random.Range(50,50);
         timeSpentSitting = 0;
         CreateStepper(Stay);
     }
@@ -76,11 +70,5 @@ public class CarNavigation : AbstractAgent
 
     void SetNewTarget(){
         SetTarget(nCont.GetRandomObject(nCont.GetAllRoads()));
-    }
-
-    void SetNMAgentProperties(){
-        nmAgent.updatePosition = false;
-        nmAgent.velocity = Vector3.zero;
-        nmAgent.acceleration = 0f;
     }
 }
