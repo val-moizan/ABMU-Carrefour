@@ -135,6 +135,10 @@ PrefabInstance:
       value: Road (3)
       objectReference: {fileID: 0}
     - target: {fileID: 3009888830697568266, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
+      propertyPath: m_TagString
+      value: drivable
+      objectReference: {fileID: 0}
+    - target: {fileID: 3009888830697568266, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
@@ -365,6 +369,10 @@ PrefabInstance:
       value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 2094515654331650091, guid: 5a86da99b12c5bd46b2857c2130e9507, type: 3}
+      propertyPath: m_TagString
+      value: walkable
+      objectReference: {fileID: 0}
+    - target: {fileID: 2094515654331650091, guid: 5a86da99b12c5bd46b2857c2130e9507, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
@@ -379,6 +387,10 @@ PrefabInstance:
     - target: {fileID: 2373045017072839581, guid: 5a86da99b12c5bd46b2857c2130e9507, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 2402390535738683778, guid: 5a86da99b12c5bd46b2857c2130e9507, type: 3}
+      propertyPath: m_TagString
+      value: walkable
       objectReference: {fileID: 0}
     - target: {fileID: 2402390535738683778, guid: 5a86da99b12c5bd46b2857c2130e9507, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -435,6 +447,10 @@ PrefabInstance:
     - target: {fileID: 3053069587556897376, guid: 5a86da99b12c5bd46b2857c2130e9507, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 3117175081643777979, guid: 5a86da99b12c5bd46b2857c2130e9507, type: 3}
+      propertyPath: m_TagString
+      value: walkable
       objectReference: {fileID: 0}
     - target: {fileID: 3117175081643777979, guid: 5a86da99b12c5bd46b2857c2130e9507, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -545,6 +561,10 @@ PrefabInstance:
       value: Carrefour
       objectReference: {fileID: 0}
     - target: {fileID: 4764402970806250908, guid: 5a86da99b12c5bd46b2857c2130e9507, type: 3}
+      propertyPath: m_TagString
+      value: drivable
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764402970806250908, guid: 5a86da99b12c5bd46b2857c2130e9507, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
@@ -595,6 +615,10 @@ PrefabInstance:
     - target: {fileID: 5875227934623144237, guid: 5a86da99b12c5bd46b2857c2130e9507, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055775928045801367, guid: 5a86da99b12c5bd46b2857c2130e9507, type: 3}
+      propertyPath: m_TagString
+      value: walkable
       objectReference: {fileID: 0}
     - target: {fileID: 6055775928045801367, guid: 5a86da99b12c5bd46b2857c2130e9507, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -862,6 +886,10 @@ PrefabInstance:
       value: Road (1)
       objectReference: {fileID: 0}
     - target: {fileID: 3009888830697568266, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
+      propertyPath: m_TagString
+      value: walkable
+      objectReference: {fileID: 0}
+    - target: {fileID: 3009888830697568266, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
@@ -870,12 +898,20 @@ PrefabInstance:
       value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4393188053943046924, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
+      propertyPath: m_TagString
+      value: walkable
+      objectReference: {fileID: 0}
+    - target: {fileID: 4393188053943046924, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 5012030992290355472, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 6015319640656565270, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
+      propertyPath: m_TagString
+      value: walkable
       objectReference: {fileID: 0}
     - target: {fileID: 6015319640656565270, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -1061,7 +1097,7 @@ MonoBehaviour:
   endFrame: -1
   agentPrefab: {fileID: 7133355612121810398, guid: fecd14859ccba024ea1286d45ca92266, type: 3}
   carPrefab: {fileID: 4957403328447848754, guid: af5790ed9ac5e3d4bafefb0328794147, type: 3}
-  numAgents: 1
+  numAgents: 10
   distToTargetThreshold: 2
 --- !u!4 &1420382303
 Transform:
@@ -1242,6 +1278,10 @@ PrefabInstance:
       value: Road
       objectReference: {fileID: 0}
     - target: {fileID: 3009888830697568266, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
+      propertyPath: m_TagString
+      value: drivable
+      objectReference: {fileID: 0}
+    - target: {fileID: 3009888830697568266, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
@@ -1250,12 +1290,20 @@ PrefabInstance:
       value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4393188053943046924, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
+      propertyPath: m_TagString
+      value: walkable
+      objectReference: {fileID: 0}
+    - target: {fileID: 4393188053943046924, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 5012030992290355472, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 6015319640656565270, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
+      propertyPath: m_TagString
+      value: walkable
       objectReference: {fileID: 0}
     - target: {fileID: 6015319640656565270, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -1439,6 +1487,10 @@ PrefabInstance:
     - target: {fileID: 3009888830697568266, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
       propertyPath: m_Name
       value: Road (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3009888830697568266, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
+      propertyPath: m_TagString
+      value: drivable
       objectReference: {fileID: 0}
     - target: {fileID: 3009888830697568266, guid: 7da408d4da09c8d499195921a25a599b, type: 3}
       propertyPath: m_StaticEditorFlags
