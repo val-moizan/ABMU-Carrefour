@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - walkable
+  - drivable
+  - Feu X
+  - Feu Z
+  - PassagePieton
   layers:
   - Default
   - TransparentFX

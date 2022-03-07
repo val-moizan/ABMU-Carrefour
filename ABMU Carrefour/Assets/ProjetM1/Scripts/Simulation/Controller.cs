@@ -19,12 +19,13 @@ public class Controller : AbstractController
 
 
     private List<GameObject> roads, sidewalks;
-    
+
     void Start(){
         roads = GetAllRoads();
         sidewalks = GetAllSidewalks();
         createAgents();
         createCars();
+
     }
     void Update(){
         

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using ABMU;
+using UnityEngine.AI;
 
 public class CarrefourScript : MonoBehaviour
 {
@@ -10,51 +11,45 @@ public class CarrefourScript : MonoBehaviour
     Renderer floorRenderer;
     Bounds bounds;
     int timer = 0;
+    public int delay = 2000;
+
     void Start()
     {
         nCont = GameObject.FindObjectOfType<Controller>();
 
-       // floorRenderer = this.transform.GetChild(0).GetComponent<Renderer>();
-      //  this.GetComponent<Renderer>().enabled = false;
-        
-       
+        timer = delay-1;
     }
 
     private void LateUpdate() {
         timer ++;
-        int value = 2000;
-        if(timer == value){
-            GameObject[] objs = GameObject.FindGameObjectsWithTag("Feu X");
-            foreach(GameObject obj in objs){
-                FeuScript s = obj.GetComponent<FeuScript>();
-                StartCoroutine(setRed(s));
-            }
-
-            GameObject[] objs2 = GameObject.FindGameObjectsWithTag("Feu Z");
-            foreach(GameObject obj in objs2){
-                FeuScript s = obj.GetComponent<FeuScript>();
-                StartCoroutine(setGreen(s));
-            }
-            //Debug.Log("Z");
-        }else if(timer == value * 2){
-            GameObject[] objs = GameObject.FindGameObjectsWithTag("Feu Z");
-            foreach(GameObject obj in objs){
-                FeuScript s = obj.GetComponent<FeuScript>();
-                StartCoroutine(setRed(s));
-            }
-
-            GameObject[] objs2 = GameObject.FindGameObjectsWithTag("Feu X");
-            foreach(GameObject obj in objs2){
-                FeuScript s = obj.GetComponent<FeuScript>();
-                StartCoroutine(setGreen(s));
-            }
-            //Debug.Log("X");
+        
+        if(timer == delay){
+            updateLights("X", "Z");
+        }else if(timer == delay * 2){
+            updateLights("Z", "X");
             timer = 0;
         }
         
         
     }
+    public GameObject[] getLightsInAxis(string axis)
+    {
+        string feu = "Feu " + axis.ToUpper();
+        return GameObject.FindGameObjectsWithTag(feu);
+    }
+    public void updateLights(string openedAxis, string closedAxis){
+        GameObject[] objs = getLightsInAxis(closedAxis);
+        foreach (GameObject obj in objs){
+            FeuScript s = obj.GetComponent<FeuScript>();
+            StartCoroutine(setRed(s));
+        }
 
+        objs = getLightsInAxis(openedAxis);
+        foreach (GameObject obj in objs){
+            FeuScript s = obj.GetComponent<FeuScript>();
+            StartCoroutine(setGreen(s));
+        }
+    }
     public IEnumerator setRed(FeuScript s){
         s.setOrange();
         yield return new WaitForSeconds(1);
@@ -62,8 +57,9 @@ public class CarrefourScript : MonoBehaviour
     }
 
     public IEnumerator setGreen(FeuScript s){
-        yield return new WaitForSeconds(1);
+
         s.setGreen();
+        yield return new WaitForSeconds(0);
     }
 
 
