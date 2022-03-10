@@ -13,51 +13,102 @@ public class AgentNavigation : AbstractAgent
     Vector3 target;
     public GameObject targetObject;
     public bool isNearTarget = false;
-
     int timeSpentSitting = 0;
     int stationayrDuration = -1;
-
+    ActionManager manager;
     public override void Init(){
         base.Init();
         nCont = GameObject.FindObjectOfType<Controller>();
         nmAgent = GetComponent<NavMeshAgent>();
-        int a = nmAgent.areaMask;
-       // nmAgent.SetDestination(new Vector3(15f,2.5f,15f));
-       // nmAgent.isStopped = false;
-        CreateStepper(CheckDistToTarget, 1, 100);
+        this.manager = new ActionManager();
         SetupStationary();
     }
     
 
     public void SetTarget(GameObject obj){
         targetObject = obj;
-        target = nCont.GetRandomPointInObject(targetObject, nCont.agentPrefab);
-        nmAgent.SetDestination(target);
-        nmAgent.isStopped = false;
 
-        CreateStepper(CheckDistToTarget, 1, 100);
+        GameObject carrefour = GameObject.FindGameObjectWithTag("carrefour");
+        CarrefourScript sc = carrefour.GetComponent<CarrefourScript>();
 
-        //CreateStepper(Move, 1, 105);
+        
+        nCont.clearAllWaypoints();
+       // nCont.addWaypoint("s", transform.position);
+        sc.addActionsToManager(this.transform.position, nCont.GetRandomPointInObject(obj, nCont.agentPrefab), manager);
+
+        goToNextStep();
+
+    }
+    public void goToNextStep()
+    {
+        if(manager.getFirstAction() != null)
+        {
+            target = manager.getFirstAction().waypoint;
+            nmAgent.SetDestination(target);
+            nmAgent.isStopped = false;
+            CreateStepper(CheckDistToTarget, 1, 100);
+        }
+        else
+        {
+            SetupStationary();
+        }
     }
     void CheckDistToTarget(){
-        
         float d = Vector3.Distance(this.transform.position, target);
-        if(d < nCont.distToTargetThreshold){ //reached target
-            isNearTarget = true;
+        float distX = this.transform.position.x - target.x;
+        float distZ = this.transform.position.z - target.z;
+        float distH = Mathf.Sqrt(distX * distX + distZ * distZ);
+        float distV = this.transform.position.y - target.y;
+        Bounds rb = nCont.agentPrefab.transform.Find("Body").GetComponent<Collider>().bounds;
 
+        float agentHeight = rb.size.y;
+        if (distH <= nCont.distToTargetThreshold)
+        { //reached target
+            isNearTarget = true;
+  
             nmAgent.isStopped = true;
             
             DestroyStepper("CheckDistToTarget");
-           // DestroyStepper("Move");
 
-            SetupStationary();
-        }
-        else{
+            
+            if(manager.getFirstAction().pass != null) //Il y a un passage piéton à traverser
+            {
+                //TODO: check if cars
+                PassScript script = manager.getFirstAction().pass.GetComponent<PassScript>();
+                if (script.isOpen())
+                {
+                    manager.removeFirstAction();
+                    goToNextStep();
+                }
+                else
+                {
+                    CreateStepper(waitForGreen, 1, 100);
+                }
+
+            }
+            else
+            {
+                manager.removeFirstAction();
+                goToNextStep();
+            }
+           
+
+        }else{
             isNearTarget = false;
         }
     }
 
-    
+    void waitForGreen()
+    {
+        PassScript script = manager.getFirstAction().pass.GetComponent<PassScript>();
+        if (script.isOpen())
+        {
+            DestroyStepper("waitForGreen");
+            goToNextStep();
+        }
+    }
+
+
     void SetupStationary(){
         stationayrDuration = Random.Range(50,50);
         timeSpentSitting = 0;

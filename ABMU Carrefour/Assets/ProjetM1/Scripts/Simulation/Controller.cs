@@ -11,7 +11,7 @@ using UnityEditor;
 
 public class Controller : AbstractController
 {
-    public GameObject agentPrefab, carPrefab;
+    public GameObject agentPrefab, carPrefab, waypointPrefab;
     public int numAgents = 100;
 
     [Header("Agent Parameters")]
@@ -24,7 +24,7 @@ public class Controller : AbstractController
         roads = GetAllRoads();
         sidewalks = GetAllSidewalks();
         createAgents();
-        createCars();
+       // createCars();
 
     }
     void Update(){
@@ -41,7 +41,7 @@ public class Controller : AbstractController
             cubeRenderer.material.SetColor("_Color", Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f));
             NavMeshAgent nmAgent = agent.GetComponent<NavMeshAgent>();
             GameObject random = GetRandomObject(sidewalks);
-            Vector3 point = GetRandomPointInObject(random, agentPrefab);
+            Vector3 point = GetCenterOfObject(random);
             nmAgent.Warp(point);
             agent.transform.position = nmAgent.nextPosition;
             agent.GetComponent<AgentNavigation>().Init();
@@ -65,6 +65,7 @@ public class Controller : AbstractController
     }
 
     public GameObject GetRandomObject(List<GameObject> list){
+
         GameObject ob = list[Random.Range(0,list.Count)];
         return ob;
     }
@@ -91,5 +92,27 @@ public class Controller : AbstractController
     }    
     public List<GameObject> GetAllSidewalks(){
         return new List<GameObject>(GameObject.FindGameObjectsWithTag("walkable"));
-    }    
+    }
+
+    //TODO: delete
+    public void addWaypoint(string index, Vector3 pos)
+    {
+        GameObject ob = Instantiate(waypointPrefab);
+        ob.transform.position = pos;
+        TextMesh t = ob.AddComponent<TextMesh>();
+        t.text = index;
+        t.fontSize = 30;
+        t.transform.localEulerAngles += new Vector3(90, 0, 0);
+        t.color = new Color(1, 0, 0);
+    }
+    //TODO: delete
+    public void clearAllWaypoints()
+    {
+        GameObject[] objs = GameObject.FindGameObjectsWithTag("waypoint");
+        foreach (GameObject ob in objs)
+        {
+            Destroy(ob);
+        }
+
+    }
 }

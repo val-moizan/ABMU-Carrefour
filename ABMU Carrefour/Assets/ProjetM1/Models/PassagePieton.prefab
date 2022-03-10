@@ -106,9 +106,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3218000640517673497}
   - component: {fileID: 8814253277812654114}
+  - component: {fileID: 7294285233318044112}
   m_Layer: 0
   m_Name: PassagePieton
-  m_TagString: walkable
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -147,6 +148,18 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &7294285233318044112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1753200633171212865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abaab5f3c0d76634bac33fb676198310, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2252183817203396729
 GameObject:
   m_ObjectHideFlags: 0

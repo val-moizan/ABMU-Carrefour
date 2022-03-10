@@ -8,7 +8,10 @@ TagManager:
   - drivable
   - Feu X
   - Feu Z
-  - PassagePieton
+  - PassPietX
+  - PassPietZ
+  - waypoint
+  - carrefour
   layers:
   - Default
   - TransparentFX
