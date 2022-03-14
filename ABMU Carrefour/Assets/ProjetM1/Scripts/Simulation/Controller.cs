@@ -19,6 +19,7 @@ public class Controller : AbstractController
 
 
     private List<GameObject> roads, sidewalks;
+    private List<Waypoint> waypoint;
 
     public bool pov;
     void Start(){
@@ -31,12 +32,8 @@ public class Controller : AbstractController
     void Update(){
         
     }
-
     void createAgents(){
-
-        for (int i = 0; i < numAgents; i++)
-        {
-
+        for (int i = 0; i < numAgents; i++) {
             GameObject agent = Instantiate(agentPrefab);
             if (pov)
             {
@@ -75,10 +72,7 @@ public class Controller : AbstractController
         }
     }
     void createCars(){
-
-        for (int i = 0; i < numAgents; i++)
-        {
-
+        for (int i = 0; i < numAgents; i++) {
             GameObject car = Instantiate(carPrefab);
             NavMeshAgent nmAgent = car.GetComponent<NavMeshAgent>();
             GameObject random = GetRandomObject(roads);
@@ -88,13 +82,15 @@ public class Controller : AbstractController
             car.GetComponent<CarNavigation>().Init();
         }
     }
-
+    public Waypoint GetRandomWaypoint(List<Waypoint> list) {
+        Waypoint wp = list[Random.Range(0, list.Count)];
+        return wp;
+    }
     public GameObject GetRandomObject(List<GameObject> list){
 
         GameObject ob = list[Random.Range(0,list.Count)];
         return ob;
     }
-
     public Vector3 GetRandomPointInObject(GameObject obj, GameObject agent){
         Bounds rb = obj.GetComponent<Collider>().bounds;
         Vector3 cr = Utilities.RandomPointInBounds(rb);

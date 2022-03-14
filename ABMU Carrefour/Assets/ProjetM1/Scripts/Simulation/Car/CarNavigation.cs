@@ -1,44 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using ABMU.Core;
-
 using UnityEngine.AI;
-
-public class CarNavigation : AbstractAgent
-{
+public class CarNavigation : AbstractAgent {
     Controller nCont;
     NavMeshAgent nmAgent;
     Vector3 target;
-    public GameObject targetObject;
+    //public GameObject targetObject;
     public bool isNearTarget = false;
+
+    Waypoint waypoints;
+    private Transform currentWaypoint;
 
     int timeSpentSitting = 0;
     int stationayrDuration = -1;
 
-    public override void Init()
-    {
+    public override void Init() {
         base.Init();
-        nCont = GameObject.FindObjectOfType<Controller>();
+        waypoints = GameObject.FindGameObjectWithTag("CarWaypoints").GetComponent<Waypoint>();
         nmAgent = GetComponent<NavMeshAgent>();
-        int a = nmAgent.areaMask;
-        //nmAgent.SetDestination(new Vector3(7.5f,2.5f,7.5f));
-        // nmAgent.isStopped = false;
+        currentWaypoint = waypoints.GetNextWaypoint(currentWaypoint);
+        
+        
+        transform.position = currentWaypoint.position; // positionne la voiture sur le 1er waypoint
+        nmAgent.SetDestination(waypoints.GetNextWaypoint(null).position);
+        nCont = GameObject.FindObjectOfType<Controller>();
+        //CreateStepper(CheckDistToTarget, 1, 100);
         SetupStationary();
     }
-
-
-    public void SetTarget(GameObject obj)
-    {
-        targetObject = obj;
-        target = nCont.GetRandomPointInObject(targetObject, nCont.carPrefab);
+    public void SetTarget(Transform obj) {
+        //targetObject = obj;
+        target = obj.position;
         nmAgent.SetDestination(target);
         nmAgent.isStopped = false;
 
         CreateStepper(CheckDistToTarget, 1, 100);
-
-        //CreateStepper(Move, 1, 105);
     }
     void CheckDistToTarget()
     {
@@ -60,27 +57,21 @@ public class CarNavigation : AbstractAgent
             isNearTarget = false;
         }
     }
-
-
     void SetupStationary()
     {
         stationayrDuration = Random.Range(50, 50);
         timeSpentSitting = 0;
         CreateStepper(Stay);
     }
-
-    void Stay()
-    {
+    void Stay() {
         timeSpentSitting++;
-        if (timeSpentSitting > stationayrDuration)
-        {
+        if (timeSpentSitting > stationayrDuration) {
             SetNewTarget();
             DestroyStepper("Stay");
         }
     }
-
-    void SetNewTarget()
-    {
-        SetTarget(nCont.GetRandomObject(nCont.GetAllRoads()));
+    void SetNewTarget() {
+        currentWaypoint = waypoints.GetNextWaypoint(currentWaypoint);
+        SetTarget(currentWaypoint);
     }
 }
