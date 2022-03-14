@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -3672196613818996611}
   - component: {fileID: 3949642146828466568}
   - component: {fileID: 1236042029591761415}
-  - component: {fileID: -5183251995475959101}
+  - component: {fileID: 2879368093176455438}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -120,7 +120,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &-5183251995475959101
+--- !u!114 &2879368093176455438
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -132,7 +132,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19efd9a399163b647a661717ea028599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetObject: {fileID: 0}
   isNearTarget: 0
 --- !u!1 &6727119701332035206
 GameObject:

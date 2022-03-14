@@ -19,23 +19,19 @@ public class Controller : AbstractController
 
 
     private List<GameObject> roads, sidewalks;
+    private List<Waypoint> waypoint;
 
     void Start(){
         roads = GetAllRoads();
         sidewalks = GetAllSidewalks();
-        createAgents();
+        //createAgents();
         createCars();
-
     }
     void Update(){
         
     }
-
     void createAgents(){
-
-        for (int i = 0; i < numAgents; i++)
-        {
-
+        for (int i = 0; i < numAgents; i++) {
             GameObject agent = Instantiate(agentPrefab);
             var cubeRenderer = agent.GetComponent<Renderer>();
             cubeRenderer.material.SetColor("_Color", Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f));
@@ -47,12 +43,8 @@ public class Controller : AbstractController
             agent.GetComponent<AgentNavigation>().Init();
         }
     }
-
     void createCars(){
-
-        for (int i = 0; i < numAgents; i++)
-        {
-
+        for (int i = 0; i < numAgents; i++) {
             GameObject car = Instantiate(carPrefab);
             var cubeRenderer = car.GetComponent<Renderer>();
             NavMeshAgent nmAgent = car.GetComponent<NavMeshAgent>();
@@ -63,12 +55,14 @@ public class Controller : AbstractController
             car.GetComponent<CarNavigation>().Init();
         }
     }
-
+    public Waypoint GetRandomWaypoint(List<Waypoint> list) {
+        Waypoint wp = list[Random.Range(0, list.Count)];
+        return wp;
+    }
     public GameObject GetRandomObject(List<GameObject> list){
         GameObject ob = list[Random.Range(0,list.Count)];
         return ob;
     }
-
     public Vector3 GetRandomPointInObject(GameObject obj, GameObject agent){
         Bounds rb = obj.GetComponent<Collider>().bounds;
         Vector3 cr = Utilities.RandomPointInBounds(rb);

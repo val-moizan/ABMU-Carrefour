@@ -9,6 +9,7 @@ TagManager:
   - Feu X
   - Feu Z
   - PassagePieton
+  - CarWaypoints
   layers:
   - Default
   - TransparentFX
