@@ -41,14 +41,14 @@ public class CarrefourScript : MonoBehaviour
         Vector3 middle = this.transform.position;
         bool crossX = shouldCrossAxis(start.x, end.x, middle.x);
         bool crossZ = shouldCrossAxis(start.z, end.z, middle.z);
-        List<Action> actions = new List<Action>();
+
         if (crossX){
             Vector3 from = getRelativeVector(start);
             
             GameObject pass = getNearestObject(start, GameObject.FindGameObjectsWithTag("PassPietX"));
             KeyValuePair<Vector3, Vector3> vecs = getWaypointsNearPass(pass, from, true);
-            manager.addAction(new Action(pass, vecs.Key));
-            actions.Add(new Action(null, vecs.Key));
+            manager.addAction(new Action(pass, vecs.Key, vecs.Value));
+
             start = vecs.Value; //update la prochaine position après le passage piéton pour la suite
         }
         if (crossZ){
@@ -56,11 +56,9 @@ public class CarrefourScript : MonoBehaviour
 
             GameObject pass = getNearestObject(start, GameObject.FindGameObjectsWithTag("PassPietZ"));
             KeyValuePair<Vector3, Vector3> vecs = getWaypointsNearPass(pass, from, false);
-            manager.addAction(new Action(pass, vecs.Key));
-            actions.Add(new Action(pass, vecs.Key));
+            manager.addAction(new Action(pass, vecs.Key, vecs.Value));
         }
-        actions.Add(new Action(null, end));
-        manager.addAction(new Action(null, end));
+        manager.addAction(new Action(null, end, Vector3.zero));
        // DEBUGTODELET(actions);
     }
     // TODO: delete
@@ -72,17 +70,6 @@ public class CarrefourScript : MonoBehaviour
             Action ac = ((Action)objs[index]);
             nCont.addWaypoint("" + index, ac.waypoint);
         }
-    }
-    public Action addAction(Action current, Action newAction){
-        if(current == null){
-            current = newAction;
-            return current;
-        }
-            
-        if(current.next != null)
-            addAction(current.next, newAction);
-        current.next = newAction;
-        return current;
     }
     /// <param name="from"></param>
     /// <returns>Vecteur type (1, y , -1) correspondant aux coordonnées d'où il vient</returns>
@@ -107,14 +94,17 @@ public class CarrefourScript : MonoBehaviour
         float height = 4;
         float security = 1;
         width += security * 2;
+        float random = Random.Range(-(height / 2), height / 2);
         if (x){
             start.x += from.x == 1 ? (width / 2) : -(width / 2);
-            start.z += Random.Range(-(height / 2), height / 2);
+            start.z += random;
             end.x -= from.x == 1 ? (width / 2) : -(width / 2);
+            end.z += random;
         } else{
             start.z += from.z == 1 ? (width / 2) : -(width / 2);
-            start.x += Random.Range(-(height / 2), height / 2);
+            start.x += random;
             end.z -= from.z == 1 ? (width / 2) : -(width / 2);
+            end.x += random;
         }
         return new KeyValuePair<Vector3, Vector3>(start, end);
     }

@@ -1912,8 +1912,9 @@ MonoBehaviour:
   agentPrefab: {fileID: 7133355612121810398, guid: fecd14859ccba024ea1286d45ca92266, type: 3}
   carPrefab: {fileID: 4957403328447848754, guid: af5790ed9ac5e3d4bafefb0328794147, type: 3}
   waypointPrefab: {fileID: 2886435444367641808, guid: fb252775bc00a124397c76186fd92a8c, type: 3}
-  numAgents: 20
+  numAgents: 1
   distToTargetThreshold: 1
+  pov: 1
 --- !u!4 &1420382303
 Transform:
   m_ObjectHideFlags: 0

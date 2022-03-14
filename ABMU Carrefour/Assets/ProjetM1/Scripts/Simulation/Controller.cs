@@ -20,6 +20,7 @@ public class Controller : AbstractController
 
     private List<GameObject> roads, sidewalks;
 
+    public bool pov;
     void Start(){
         roads = GetAllRoads();
         sidewalks = GetAllSidewalks();
@@ -37,6 +38,12 @@ public class Controller : AbstractController
         {
 
             GameObject agent = Instantiate(agentPrefab);
+            if (pov)
+            {
+                addCamToAgent(agent);
+            }
+            
+
             var cubeRenderer = agent.GetComponent<Renderer>();
             cubeRenderer.material.SetColor("_Color", Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f));
             NavMeshAgent nmAgent = agent.GetComponent<NavMeshAgent>();
@@ -47,14 +54,32 @@ public class Controller : AbstractController
             agent.GetComponent<AgentNavigation>().Init();
         }
     }
-
+    void addCamToAgent(GameObject agent)
+    {
+        List<GameObject> childrenList = new List<GameObject>();
+        Transform[] children = agent.GetComponentsInChildren<Transform>(true);
+        for (int z = 0; z < children.Length; z++)
+        {
+            Transform child = children[z];
+            if (child != transform)
+            {
+                childrenList.Add(child.gameObject);
+            }
+        }
+        for (int z = 0; z < childrenList.Count; z++)
+        {
+            if (childrenList[z].name.Equals("Camera"))
+            {
+                childrenList[z].AddComponent<Camera>();
+            }
+        }
+    }
     void createCars(){
 
         for (int i = 0; i < numAgents; i++)
         {
 
             GameObject car = Instantiate(carPrefab);
-            var cubeRenderer = car.GetComponent<Renderer>();
             NavMeshAgent nmAgent = car.GetComponent<NavMeshAgent>();
             GameObject random = GetRandomObject(roads);
             Vector3 point = GetRandomPointInObject(random, carPrefab);

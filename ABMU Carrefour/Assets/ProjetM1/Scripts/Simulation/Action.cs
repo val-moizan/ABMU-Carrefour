@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Action
 {
-    public Action next;
     public GameObject pass;
-    public Vector3 waypoint;
-    public Action(GameObject pass, Vector3 waypoint)
+    public Vector3 waypoint, otherSide;
+    public Action(GameObject pass, Vector3 waypoint, Vector3 otherSide)
     {
         this.pass = pass;
         this.waypoint = waypoint;
+        this.otherSide = otherSide;
     }
 }

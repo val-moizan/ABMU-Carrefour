@@ -25,7 +25,6 @@ public class CarNavigation : AbstractAgent
         int a = nmAgent.areaMask;
         //nmAgent.SetDestination(new Vector3(7.5f,2.5f,7.5f));
         // nmAgent.isStopped = false;
-        CreateStepper(CheckDistToTarget, 1, 100);
         SetupStationary();
     }
 
