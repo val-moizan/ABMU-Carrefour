@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class Waypoint : MonoBehaviour {
+public class Waypoint : MonoBehaviour
+{
     public Waypoint prevWaypoint;
     public Waypoint nextWaypoint;
 
@@ -24,12 +25,48 @@ public class Waypoint : MonoBehaviour {
         }
         Gizmos.DrawLine(transform.GetChild(transform.childCount - 1).position, transform.GetChild(0).position);
     }
-    public Transform GetNextWaypoint(Transform currentWaypoint) {
+
+    public Transform GetNextWaypoint(Transform currentWaypoint)
+    {
+        int[] numbers = { 1, 3, 6 };
+        int randomIndex = Random.Range(0, 3);
+        Transform wpDesti;
+
+        if (currentWaypoint == null) wpDesti = transform.GetChild(0);
+
+        if (currentWaypoint.GetSiblingIndex() < transform.childCount - 1)
+        {
+            if (currentWaypoint.GetSiblingIndex() == 1 || currentWaypoint.GetSiblingIndex() == 4 || currentWaypoint.GetSiblingIndex() == 7 || currentWaypoint.GetSiblingIndex() == 10)
+            {
+                wpDesti = transform.GetChild(currentWaypoint.GetSiblingIndex() + numbers[randomIndex]);
+            }
+            else wpDesti = transform.GetChild(currentWaypoint.GetSiblingIndex() + 1);
+        }
+        else wpDesti = transform.GetChild(0);
+
+        if (wpDesti.GetSiblingIndex() > transform.childCount)
+            return wpDesti.GetChild(currentWaypoint.GetSiblingIndex() - transform.childCount);
+
+        return wpDesti;
+    }
+
+    /*
+    public Transform GetNextWaypoint(Transform currentWaypoint)
+    {
+        int[] numbers = { 1, 3, 6 };
+        int randomIndex = Random.Range(0, 3);
+        Transform wpDesti;
+
         if (currentWaypoint == null) return transform.GetChild(0);
 
         if (currentWaypoint.GetSiblingIndex() < transform.childCount - 1)
-            return transform.GetChild(currentWaypoint.GetSiblingIndex() + 1);
-
+        {
+            if (currentWaypoint.GetSiblingIndex() == 1 || currentWaypoint.GetSiblingIndex() == 4 || currentWaypoint.GetSiblingIndex() == 7 || currentWaypoint.GetSiblingIndex() == 10)
+            {
+                return transform.GetChild(currentWaypoint.GetSiblingIndex() + numbers[randomIndex] );
+            }
+            else return transform.GetChild(currentWaypoint.GetSiblingIndex() + 1);
+        }
         else return transform.GetChild(0);
-    }
+    }*/
 }
