@@ -11,7 +11,7 @@ public class AgentNavigation : AbstractAgent
     Controller nCont;
     NavMeshAgent nmAgent;
     Vector3 target;
-    
+
     public RuntimeAnimatorController walkingAnim, idleAnim;
     public Material transparent;
     int timeSpentSitting = 0;
@@ -46,14 +46,14 @@ public class AgentNavigation : AbstractAgent
         }
 
     }
-    
+
 
     public void SetTarget(GameObject obj){
 
         GameObject carrefour = GameObject.FindGameObjectWithTag("carrefour");
         CarrefourScript sc = carrefour.GetComponent<CarrefourScript>();
 
-        
+
         nCont.clearAllWaypoints();
         // nCont.addWaypoint("s", transform.position);
         Vector3 currTarget = nCont.GetRandomPointInObject(obj, nCont.agentPrefab);
@@ -99,7 +99,7 @@ public class AgentNavigation : AbstractAgent
         //float agentHeight = 2;// rb.size.y;
         if (distH <= nCont.distToTargetThreshold)
         { //reached target
-  
+
             nmAgent.isStopped = true;
 
             GameObject passage = manager.getFirstAction().pass;
@@ -123,7 +123,7 @@ public class AgentNavigation : AbstractAgent
                         {
                             CreateStepper(checkingCars, 1, 100);
                         }
-                        
+
                         DestroyStepper("CheckDistToTarget");
                         timeLooking = 1;
                         animator.runtimeAnimatorController = idleAnim;
@@ -138,12 +138,12 @@ public class AgentNavigation : AbstractAgent
                 manager.removeFirstAction();
                 goToNextStep();
             }
-           
+
 
         }else{
 
         }
- 
+
     }
 
 
@@ -200,7 +200,7 @@ public class AgentNavigation : AbstractAgent
             }
             else
             {
-                
+
                 transform.rotation = Quaternion.Slerp(transform.rotation, this.looking, 0.1f);
                 if (!carsComing())
                 {
@@ -226,7 +226,7 @@ public class AgentNavigation : AbstractAgent
             Destroy(cube);
         }
         cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        
+
         CarDetector detector = cube.AddComponent<CarDetector>();
         Renderer cubeRenderer = cube.GetComponent<Renderer>();
         cubeRenderer.material = transparent;
@@ -237,8 +237,8 @@ public class AgentNavigation : AbstractAgent
         {
             return true;
         }
-        
-        
+
+
         return false;
     }
     private bool isLightGreen(GameObject passage)

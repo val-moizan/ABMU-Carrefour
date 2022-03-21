@@ -30,7 +30,7 @@ public class Controller : AbstractController
 
     }
     void Update(){
-        
+
     }
     void createAgents(){
         for (int i = 0; i < numAgents; i++) {
@@ -107,7 +107,7 @@ public class Controller : AbstractController
 
     public List<GameObject> GetAllRoads(){
         return new List<GameObject>(GameObject.FindGameObjectsWithTag("drivable"));
-    }    
+    }
     public List<GameObject> GetAllSidewalks(){
         return new List<GameObject>(GameObject.FindGameObjectsWithTag("walkable"));
     }

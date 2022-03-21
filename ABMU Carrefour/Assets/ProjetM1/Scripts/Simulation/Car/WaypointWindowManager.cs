@@ -44,13 +44,14 @@ public class WaypointManagerWindow : EditorWindow
         waypointObject.transform.SetParent(waypointRoot, false);
 
         Waypoint waypoint = waypointObject.GetComponent<Waypoint>();
+        /*
         if (waypointRoot.childCount > 1)
         {
             waypoint.prevWaypoint = waypointRoot.GetChild(waypointRoot.childCount - 2).GetComponent<Waypoint>();
             waypoint.prevWaypoint.nextWaypoint = waypoint;
             waypoint.transform.position = waypoint.prevWaypoint.transform.position;
             waypoint.transform.forward = waypoint.prevWaypoint.transform.forward;
-        }
+        }*/
         Selection.activeGameObject = waypoint.gameObject;
     }
 
