@@ -2215,7 +2215,7 @@ MonoBehaviour:
   numAgents: 10
   numCars: 1
   distToTargetThreshold: 1
-  pov: 1
+  pov: 0
 --- !u!4 &1420382303
 Transform:
   m_ObjectHideFlags: 0

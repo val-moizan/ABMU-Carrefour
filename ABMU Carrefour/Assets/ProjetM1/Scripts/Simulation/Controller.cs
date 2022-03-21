@@ -39,12 +39,10 @@ public class Controller : AbstractController
             {
                 addCamToAgent(agent);
             }
-            
-
-
             NavMeshAgent nmAgent = agent.GetComponent<NavMeshAgent>();
             GameObject random = GetRandomObject(sidewalks);
             Vector3 point = GetCenterOfObject(random);
+            point.y -= 1;
             nmAgent.Warp(point);
             agent.transform.position = nmAgent.nextPosition;
             agent.GetComponent<AgentNavigation>().Init();
