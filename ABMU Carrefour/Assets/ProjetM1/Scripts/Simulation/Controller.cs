@@ -16,7 +16,8 @@ public class Controller : AbstractController
 
     [Header("Agent Parameters")]
     public float distToTargetThreshold = 2f;
-
+    [Range(1, 100)]
+    public float thugProbability = 10;
 
     private List<GameObject> roads, sidewalks;
     private List<Waypoint> waypoint;

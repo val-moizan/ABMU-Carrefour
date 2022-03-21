@@ -2215,7 +2215,8 @@ MonoBehaviour:
   numAgents: 10
   numCars: 1
   distToTargetThreshold: 1
-  pov: 0
+  thugProbability: 100
+  pov: 1
 --- !u!4 &1420382303
 Transform:
   m_ObjectHideFlags: 0
@@ -2996,9 +2997,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80926d356030a844e8b06168f73dc2ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prevWaypoint: {fileID: 0}
-  nextWaypoint: {fileID: 0}
-  width: 1
   waypointSize: 1
 --- !u!4 &2116071345
 Transform:

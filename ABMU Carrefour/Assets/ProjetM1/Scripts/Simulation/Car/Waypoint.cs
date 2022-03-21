@@ -34,7 +34,7 @@ public class Waypoint : MonoBehaviour
         if (previousWaypoint == null) previousWaypoint = transform.GetChild(0);
         if (currentWaypoint == null) return transform.GetChild(0);
 
-        Debug.Log("prevWaypoint = " + previousWaypoint.GetSiblingIndex());
+       // Debug.Log("prevWaypoint = " + previousWaypoint.GetSiblingIndex());
         //Debug.Log("currentWaypoint = " + currentWaypoint.GetSiblingIndex());
 
         if (currentWaypoint.GetSiblingIndex() < transform.childCount - 1){ // si le prochain waypoint n'est pas le dernier

@@ -14,6 +14,7 @@ public class AgentNavigation : AbstractAgent
 
     public RuntimeAnimatorController walkingAnim, idleAnim;
     public Material transparent;
+
     int timeSpentSitting = 0;
     int stationayrDuration = -1;
     ActionManager manager;
@@ -29,12 +30,12 @@ public class AgentNavigation : AbstractAgent
         animator = GetComponent<Animator>();
         // cam = GameObject.Find("Camera").GetComponent<Camera>();
         this.manager = new ActionManager();
-       // this.transform.position = new Vector3(7.5f, 2, 7.5f);
+        this.transform.position = new Vector3(7.5f, 2, 7.5f);
 
         SetupStationary();
 
         float rand = Random.Range(0f, 100f);
-        if(rand < 10)
+        if(rand < nCont.thugProbability)
         {
             isThug = true;
             this.transform.Find("DummyMesh").GetComponent<Renderer>().material.SetColor("_Color", new Color(1f, 0f, 0f));
@@ -190,18 +191,30 @@ public class AgentNavigation : AbstractAgent
         if (timeLooking > 0)
         {
             timeLooking++;
+            Transform[] children = GetComponentsInChildren<Transform>(true);
+            Transform head = this.transform;
+            for (int z = 0; z < children.Length; z++)
+            {
+                Transform child = children[z];
+                if (child.name.Equals("B-neck"))
+                {
+                    //head = child;
+                }
+            }
+
             if (timeLooking < 100)
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation, this.looking * Quaternion.Euler(0, -90, 0), 0.1f);
+               
+                head.rotation = Quaternion.Slerp(head.rotation, this.looking * Quaternion.Euler(0, -90, 0), 0.1f);
             }
             else if (timeLooking < 200)
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation, this.looking * Quaternion.Euler(0, 90, 0), 0.1f);
+                head.rotation = Quaternion.Slerp(head.rotation, this.looking * Quaternion.Euler(0, 90, 0), 0.1f);
             }
             else
             {
 
-                transform.rotation = Quaternion.Slerp(transform.rotation, this.looking, 0.1f);
+                head.rotation = Quaternion.Slerp(head.rotation, this.looking, 0.1f);
                 if (!carsComing())
                 {
                     timeLooking = 0;
@@ -223,7 +236,7 @@ public class AgentNavigation : AbstractAgent
     {
         if(cube != null)
         {
-            Destroy(cube);
+            
         }
         cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
@@ -235,10 +248,11 @@ public class AgentNavigation : AbstractAgent
         cube.transform.position = addRotationToVec(this.transform.position, this.looking.eulerAngles.y, 6, false); //avance le cube sur la route en direction de la rotation du piéton
         if (detector.carsAreComing(manager.getFirstAction().pass.transform.position))
         {
+            Destroy(cube);
             return true;
         }
 
-
+        Destroy(cube);
         return false;
     }
     private bool isLightGreen(GameObject passage)
