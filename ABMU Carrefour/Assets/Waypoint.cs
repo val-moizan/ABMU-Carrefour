@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Waypoint : MonoBehaviour
 {
-    public Waypoint prevWaypoint;
-    public Waypoint nextWaypoint;
-
+    //public Waypoint prevWaypoint;
+    //public Waypoint nextWaypoint;
+    private Transform previousWaypoint = null;
+    /*
     [Range(0f, 5f)]
     public float width = 1f;
-
+    */
     [Range(0f, 2f)]
     [SerializeField] private float waypointSize = 1f;
     private void OnDrawGizmos()
@@ -26,47 +27,83 @@ public class Waypoint : MonoBehaviour
         Gizmos.DrawLine(transform.GetChild(transform.childCount - 1).position, transform.GetChild(0).position);
     }
 
-    public Transform GetNextWaypoint(Transform currentWaypoint)
-    {
+    public Transform GetNextWaypoint(Transform currentWaypoint) {
         int[] numbers = { 1, 3, 6 };
         int randomIndex = Random.Range(0, 3);
-        Transform wpDesti;
 
-        if (currentWaypoint == null) wpDesti = transform.GetChild(0);
+        if (previousWaypoint == null) previousWaypoint = transform.GetChild(0);
+        if (currentWaypoint == null) return transform.GetChild(0);
 
-        if (currentWaypoint.GetSiblingIndex() < transform.childCount - 1)
-        {
-            if (currentWaypoint.GetSiblingIndex() == 1 || currentWaypoint.GetSiblingIndex() == 4 || currentWaypoint.GetSiblingIndex() == 7 || currentWaypoint.GetSiblingIndex() == 10)
-            {
-                wpDesti = transform.GetChild(currentWaypoint.GetSiblingIndex() + numbers[randomIndex]);
+        Debug.Log("prevWaypoint = " + previousWaypoint.GetSiblingIndex());
+        //Debug.Log("currentWaypoint = " + currentWaypoint.GetSiblingIndex());
+            
+        if (currentWaypoint.GetSiblingIndex() < transform.childCount - 1){ // si le prochain waypoint n'est pas le dernier
+            int randNum = numbers[randomIndex];
+            // si arriver au carrefour
+            if (currentWaypoint.GetSiblingIndex() == 1 || currentWaypoint.GetSiblingIndex() == 4 || currentWaypoint.GetSiblingIndex() == 7 || currentWaypoint.GetSiblingIndex() == 10) {
+                // si précedemment déjà au carrefour, sort du carrefour
+                if (previousWaypoint.GetSiblingIndex() == 1 || previousWaypoint.GetSiblingIndex() == 4 || previousWaypoint.GetSiblingIndex() == 7 || previousWaypoint.GetSiblingIndex() == 10)
+                {
+                    previousWaypoint = currentWaypoint;
+                    return transform.GetChild(currentWaypoint.GetSiblingIndex() + 1);
+                }
+                previousWaypoint = currentWaypoint;
+                //Debug.Log("Carrefour");
+
+                if (currentWaypoint.GetSiblingIndex() + randNum - 1 > transform.childCount - 1) // si dépasse le total
+                    return transform.GetChild(currentWaypoint.GetSiblingIndex() + randNum - transform.childCount);
+                // au carrefour mais ne dépasse pas le total, return random waypoint du carrefour
+                else return transform.GetChild(currentWaypoint.GetSiblingIndex() + randNum);
             }
-            else wpDesti = transform.GetChild(currentWaypoint.GetSiblingIndex() + 1);
+            else
+            {
+                previousWaypoint = currentWaypoint;
+                return transform.GetChild(currentWaypoint.GetSiblingIndex() + 1);
+            }
         }
-        else wpDesti = transform.GetChild(0);
-
-        if (wpDesti.GetSiblingIndex() > transform.childCount)
-            return wpDesti.GetChild(currentWaypoint.GetSiblingIndex() - transform.childCount);
-
-        return wpDesti;
+        else return transform.GetChild(0);
     }
-
     /*
     public Transform GetNextWaypoint(Transform currentWaypoint)
     {
         int[] numbers = { 1, 3, 6 };
         int randomIndex = Random.Range(0, 3);
-        Transform wpDesti;
+        //Transform wpDesti;
 
         if (currentWaypoint == null) return transform.GetChild(0);
 
-        if (currentWaypoint.GetSiblingIndex() < transform.childCount - 1)
+        if (currentWaypoint.GetSiblingIndex() < transform.childCount - 1) // si le prochain waypoint n'est pas le dernier
         {
+            int randNum = numbers[randomIndex];
+            // si arriver au carrefour
             if (currentWaypoint.GetSiblingIndex() == 1 || currentWaypoint.GetSiblingIndex() == 4 || currentWaypoint.GetSiblingIndex() == 7 || currentWaypoint.GetSiblingIndex() == 10)
             {
-                return transform.GetChild(currentWaypoint.GetSiblingIndex() + numbers[randomIndex] );
+                // si dépasse le total
+                if (currentWaypoint.GetSiblingIndex() + randNum - 1 > transform.childCount - 1)
+                {
+                    Debug.Log("dépasse");
+                    Debug.Log(currentWaypoint.GetSiblingIndex() + randNum - transform.childCount);
+                    return transform.GetChild(currentWaypoint.GetSiblingIndex() + randNum - transform.childCount);
+                }
+                // au carrefour mais ne dépasse pas le total, return random waypoint du carrefour
+                else
+                {
+                    Debug.Log("dépasse pas");
+                    Debug.Log(currentWaypoint.GetSiblingIndex() + randNum);
+                    return transform.GetChild(currentWaypoint.GetSiblingIndex() + randNum);
+                }
             }
-            else return transform.GetChild(currentWaypoint.GetSiblingIndex() + 1);
+            else
+            {
+                Debug.Log("next");
+                Debug.Log(currentWaypoint.GetSiblingIndex() + 1);
+                return transform.GetChild(currentWaypoint.GetSiblingIndex() + 1);
+            }
         }
-        else return transform.GetChild(0);
+        else
+        {
+            Debug.Log("retour début");
+            return transform.GetChild(0);
+        }
     }*/
 }

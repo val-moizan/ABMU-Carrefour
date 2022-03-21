@@ -169,10 +169,6 @@ public class AgentNavigation : AbstractAgent
                 transform.rotation = Quaternion.Slerp(transform.rotation, this.looking * Quaternion.Euler(0, 90, 0), 0.1f);
             }
         }
-
-
-       
-     
     }
 
     private bool isLightGreen(GameObject passage)

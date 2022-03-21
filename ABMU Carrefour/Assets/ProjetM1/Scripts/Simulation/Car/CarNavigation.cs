@@ -12,6 +12,7 @@ public class CarNavigation : AbstractAgent {
 
     Waypoint waypoints;
     private Transform currentWaypoint;
+    private Transform prevWaypoint;
 
     int timeSpentSitting = 0;
     int stationayrDuration = -1;
@@ -22,17 +23,16 @@ public class CarNavigation : AbstractAgent {
         nmAgent = GetComponent<NavMeshAgent>();
         currentWaypoint = waypoints.GetNextWaypoint(currentWaypoint);
         
-        
         transform.position = currentWaypoint.position; // positionne la voiture sur le 1er waypoint
-        nmAgent.SetDestination(waypoints.GetNextWaypoint(null).position);
+        nmAgent.SetDestination(currentWaypoint.position);
         nCont = GameObject.FindObjectOfType<Controller>();
         //CreateStepper(CheckDistToTarget, 1, 100);
         SetupStationary();
     }
     public void SetTarget(Transform obj) {
-        //targetObject = obj;
         target = obj.position;
         nmAgent.SetDestination(target);
+
         nmAgent.isStopped = false;
 
         CreateStepper(CheckDistToTarget, 1, 100);
@@ -71,6 +71,7 @@ public class CarNavigation : AbstractAgent {
         }
     }
     void SetNewTarget() {
+        prevWaypoint = currentWaypoint;
         currentWaypoint = waypoints.GetNextWaypoint(currentWaypoint);
         SetTarget(currentWaypoint);
     }

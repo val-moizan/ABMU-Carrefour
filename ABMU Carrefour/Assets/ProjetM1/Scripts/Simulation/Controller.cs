@@ -26,8 +26,7 @@ public class Controller : AbstractController
         roads = GetAllRoads();
         sidewalks = GetAllSidewalks();
         createAgents();
-       // createCars();
-
+        createCars();
     }
     void Update(){
         
