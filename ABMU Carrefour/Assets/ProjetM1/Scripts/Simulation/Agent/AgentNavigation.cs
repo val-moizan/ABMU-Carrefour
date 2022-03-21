@@ -30,7 +30,7 @@ public class AgentNavigation : AbstractAgent
         animator = GetComponent<Animator>();
         // cam = GameObject.Find("Camera").GetComponent<Camera>();
         this.manager = new ActionManager();
-        this.transform.position = new Vector3(7.5f, 2, 7.5f);
+       // this.transform.position = new Vector3(7.5f, 2, 7.5f);
 
         SetupStationary();
 
@@ -236,7 +236,7 @@ public class AgentNavigation : AbstractAgent
     {
         if(cube != null)
         {
-            
+            Destroy(cube);
         }
         cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
@@ -252,7 +252,6 @@ public class AgentNavigation : AbstractAgent
             return true;
         }
 
-        Destroy(cube);
         return false;
     }
     private bool isLightGreen(GameObject passage)
