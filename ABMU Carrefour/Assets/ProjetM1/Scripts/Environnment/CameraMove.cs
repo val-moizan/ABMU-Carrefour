@@ -14,6 +14,9 @@ public class CameraMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        GameObject ob = GameObject.FindGameObjectWithTag("Feu X");
+
+
         if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0) {
             transform.position += moveSpeed * new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         }

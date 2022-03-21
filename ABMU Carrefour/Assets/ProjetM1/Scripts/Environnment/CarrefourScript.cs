@@ -59,17 +59,7 @@ public class CarrefourScript : MonoBehaviour
             manager.addAction(new Action(pass, vecs.Key, vecs.Value));
         }
         manager.addAction(new Action(null, end, Vector3.zero));
-       // DEBUGTODELET(actions);
-    }
-    // TODO: delete
-    public void DEBUGTODELET(List<Action> objs)
-    {
-        int size = objs.Count;
-        for (int index = 0; index < size; index++)
-        {
-            Action ac = ((Action)objs[index]);
-            nCont.addWaypoint("" + index, ac.waypoint);
-        }
+
     }
     /// <param name="from"></param>
     /// <returns>Vecteur type (1, y , -1) correspondant aux coordonnées d'où il vient</returns>

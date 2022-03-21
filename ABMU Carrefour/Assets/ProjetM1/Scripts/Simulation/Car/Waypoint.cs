@@ -32,11 +32,15 @@ public class Waypoint : MonoBehaviour
         int randomIndex = Random.Range(0, 3);
         Transform wpDesti;
 
-        if (currentWaypoint == null) wpDesti = transform.GetChild(0);
+        if (currentWaypoint == null)
+        {
+            wpDesti = transform.GetChild(0);
+            return wpDesti;
+        }
 
         if (currentWaypoint.GetSiblingIndex() < transform.childCount - 1)
         {
-            if (currentWaypoint.GetSiblingIndex() == 1 || currentWaypoint.GetSiblingIndex() == 4 || currentWaypoint.GetSiblingIndex() == 7 || currentWaypoint.GetSiblingIndex() == 10)
+            if (currentWaypoint.GetSiblingIndex() + numbers[randomIndex] < transform.childCount && (currentWaypoint.GetSiblingIndex() == 1 || currentWaypoint.GetSiblingIndex() == 4 || currentWaypoint.GetSiblingIndex() == 7 || currentWaypoint.GetSiblingIndex() == 10))
             {
                 wpDesti = transform.GetChild(currentWaypoint.GetSiblingIndex() + numbers[randomIndex]);
             }

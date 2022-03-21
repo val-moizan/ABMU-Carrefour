@@ -12,7 +12,7 @@ using UnityEditor;
 public class Controller : AbstractController
 {
     public GameObject agentPrefab, carPrefab, waypointPrefab;
-    public int numAgents = 100;
+    public int numAgents = 10, numCars = 10;
 
     [Header("Agent Parameters")]
     public float distToTargetThreshold = 2f;
@@ -26,7 +26,7 @@ public class Controller : AbstractController
         roads = GetAllRoads();
         sidewalks = GetAllSidewalks();
         createAgents();
-       // createCars();
+        createCars();
 
     }
     void Update(){
@@ -41,8 +41,7 @@ public class Controller : AbstractController
             }
             
 
-            var cubeRenderer = agent.GetComponent<Renderer>();
-            cubeRenderer.material.SetColor("_Color", Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f));
+
             NavMeshAgent nmAgent = agent.GetComponent<NavMeshAgent>();
             GameObject random = GetRandomObject(sidewalks);
             Vector3 point = GetCenterOfObject(random);
@@ -67,12 +66,12 @@ public class Controller : AbstractController
         {
             if (childrenList[z].name.Equals("Camera"))
             {
-                childrenList[z].AddComponent<Camera>();
+                Camera cam = childrenList[z].AddComponent<Camera>();
             }
         }
     }
     void createCars(){
-        for (int i = 0; i < numAgents; i++) {
+        for (int i = 0; i < numCars; i++) {
             GameObject car = Instantiate(carPrefab);
             NavMeshAgent nmAgent = car.GetComponent<NavMeshAgent>();
             GameObject random = GetRandomObject(roads);
