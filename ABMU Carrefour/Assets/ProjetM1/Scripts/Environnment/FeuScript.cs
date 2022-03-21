@@ -8,7 +8,7 @@ public class FeuScript : MonoBehaviour
 
     Light red, orange, green;
     Light[] walkLights;
-    private bool isWalkLightred;
+    private bool isWalkLightred, isLightRed;
     void Start()
     {
         red = this.transform.Find("CarLight").Find("RedLight").GetComponent<Light>();
@@ -22,16 +22,22 @@ public class FeuScript : MonoBehaviour
             walkLights[i] = lights[i].GetComponent<Light>();
         }
         isWalkLightred = true;
+        isLightRed = true;
     }
 
-    public bool isWalkLightRed(){
+    public bool isWalkLightRed()
+    {
         return isWalkLightred;
     }
+    public bool isLightGreen()
+    {
+        return !isLightRed;
+    }
     public void setRed(){
-        red.intensity = 1;
+        red.intensity = 5;
         orange.intensity = 0;
         green.intensity = 0;
-
+        isLightRed = true;
 
         StartCoroutine(setWalkGreen());
     }
@@ -48,19 +54,30 @@ public class FeuScript : MonoBehaviour
     }
     public void setOrange(){
         red.intensity = 0;
-        orange.intensity = 1;
+        orange.intensity = 5;
         green.intensity = 0;
+        isLightRed = true;
     }
 
     public void setGreen(){
-        red.intensity = 0;
-        orange.intensity = 0;
-        green.intensity = 1;
-        isWalkLightred = true;
+
+        StartCoroutine(setGreenDelay());
+    }
+    public IEnumerator setGreenDelay()
+    {
         foreach (Light walkLight in walkLights)
         {
             walkLight.color = new Color(1, 0, 0);
         }
+        isWalkLightred = true;
+        yield return new WaitForSeconds(2);
+        isLightRed = false;
+        red.intensity = 0;
+        orange.intensity = 0;
+        green.intensity = 5;
+
+
+
     }
     public Transform[] findChildren(string name)
     {

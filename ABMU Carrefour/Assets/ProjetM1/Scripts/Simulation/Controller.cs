@@ -20,7 +20,6 @@ public class Controller : AbstractController
     public float thugProbability = 10;
 
     private List<GameObject> roads, sidewalks;
-    private List<Waypoint> waypoint;
 
     public bool pov;
     void Start(){
@@ -80,10 +79,7 @@ public class Controller : AbstractController
             car.GetComponent<CarNavigation>().Init();
         }
     }
-    public Waypoint GetRandomWaypoint(List<Waypoint> list) {
-        Waypoint wp = list[Random.Range(0, list.Count)];
-        return wp;
-    }
+
     public GameObject GetRandomObject(List<GameObject> list){
 
         GameObject ob = list[Random.Range(0,list.Count)];

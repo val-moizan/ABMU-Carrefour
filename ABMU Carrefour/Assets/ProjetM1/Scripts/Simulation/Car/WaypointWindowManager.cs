@@ -40,10 +40,10 @@ public class WaypointManagerWindow : EditorWindow
     }
     void CreateWaypoint()
     {
-        GameObject waypointObject = new GameObject("Waypoint " + waypointRoot.childCount, typeof(Waypoint));
+        GameObject waypointObject = new GameObject("Waypoint " + waypointRoot.childCount, typeof(Waypoints));
         waypointObject.transform.SetParent(waypointRoot, false);
 
-        Waypoint waypoint = waypointObject.GetComponent<Waypoint>();
+        Waypoints waypoint = waypointObject.GetComponent<Waypoints>();
         /*
         if (waypointRoot.childCount > 1)
         {

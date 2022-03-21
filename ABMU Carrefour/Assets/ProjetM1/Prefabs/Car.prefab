@@ -133,6 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isNearTarget: 0
+  transparent: {fileID: 2100000, guid: 271a3316917d87245bbc01414b3323f3, type: 2}
 --- !u!1 &6727119701332035206
 GameObject:
   m_ObjectHideFlags: 0

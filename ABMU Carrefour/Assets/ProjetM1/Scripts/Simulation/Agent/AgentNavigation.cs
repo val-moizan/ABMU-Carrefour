@@ -236,7 +236,7 @@ public class AgentNavigation : AbstractAgent
     {
         if(cube != null)
         {
-            Destroy(cube);
+            //Destroy(cube);
         }
         cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
@@ -251,7 +251,7 @@ public class AgentNavigation : AbstractAgent
             Destroy(cube);
             return true;
         }
-
+        Destroy(cube);
         return false;
     }
     private bool isLightGreen(GameObject passage)
@@ -271,10 +271,10 @@ public class AgentNavigation : AbstractAgent
     {
         return new Vector3(Mathf.Abs(vec.x), vec.y, Mathf.Abs(vec.z));
     }
-    private Vector3 addRotationToVec(Vector3 baseVec, float rotation, float distance, bool abs)
+    public static Vector3 addRotationToVec(Vector3 baseVec, float rotation, float distance, bool abs)
     {
-        float x = Mathf.Round(Mathf.Cos((rotation - 90) * Mathf.Deg2Rad)) * distance;
-        float z = Mathf.Round(Mathf.Sin((rotation + 90) * Mathf.Deg2Rad)) * distance;
+        float x = Mathf.Cos((rotation - 90) * Mathf.Deg2Rad) * distance;
+        float z = Mathf.Sin((rotation + 90) * Mathf.Deg2Rad) * distance;
         if (abs)
         {
             x = Mathf.Abs(x);

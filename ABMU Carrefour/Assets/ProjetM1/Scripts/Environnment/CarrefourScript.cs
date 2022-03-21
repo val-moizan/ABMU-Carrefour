@@ -20,6 +20,7 @@ public class CarrefourScript : MonoBehaviour
     {
         nCont = GameObject.FindObjectOfType<Controller>();
         timer = delay-1;
+        generateWaypoints();
     }
 
     private void LateUpdate() {
@@ -105,6 +106,17 @@ public class CarrefourScript : MonoBehaviour
         array = array.OrderBy(o => Vector3.Distance(pos, o.transform.position)).ToList();
         return array.Count == 0 ? null : (GameObject)array[0];
     }
+    public FeuScript getNearestFeu(Vector3 pos)
+    {
+        FeuScript[] list = FindObjectsOfType<FeuScript>();
+        GameObject[] objs = new GameObject[list.Length];
+        for(int i = 0; i < list.Length; i++)
+        {
+            objs[i] = list[i].gameObject;
+        }
+        return getNearestObject(pos, objs).GetComponent<FeuScript>();
+    }
+    /// <returns>true si middle est entre p1 et p2</returns>
     public bool shouldCrossAxis(float p1, float p2, float middle){
         return (p1-middle) * (p2-middle) < 0;
     }
@@ -113,6 +125,11 @@ public class CarrefourScript : MonoBehaviour
         string feu = "Feu " + axis.ToUpper();
         return GameObject.FindGameObjectsWithTag(feu);
     }
+    /// <summary>
+    /// met à jour le carrefour
+    /// </summary>
+    /// <param name="openedAxis">l'axe des feu à mettre au vert ("X" ou "Z")</param>
+    /// <param name="closedAxis">l'axe des feu à mettre au rouge ("X" ou "Z")</param>
     public void updateLights(string openedAxis, string closedAxis){
         GameObject[] objs = getLightsInAxis(closedAxis);
         foreach (GameObject obj in objs){
@@ -138,5 +155,122 @@ public class CarrefourScript : MonoBehaviour
         yield return new WaitForSeconds(0);
     }
 
+
+    public void generateWaypoints()
+    {
+        GameObject head = new GameObject("Waypoints");
+        Transform list = head.transform;
+        Waypoints waypoints = head.AddComponent<Waypoints>();
+        head.tag = "CarWaypoints";
+        list.parent = this.transform;
+
+        float roadDecalage = 2.5f;
+        float xMiddle = transform.position.x;
+        float zMiddle = transform.position.z;
+        GameObject way = new GameObject("Waypoint");
+        way.transform.parent = list;
+        way.transform.position = new Vector3(xMiddle + 30, 2, zMiddle + roadDecalage);
+        waypoints.addWaypoint(way);
+
+        way = new GameObject("Waypoint");
+        way.transform.parent = list;
+        way.transform.position = new Vector3(xMiddle + 13, 2, zMiddle + roadDecalage);
+        WaypointInformation info = way.AddComponent<WaypointInformation>();
+        info.feu = getNearestFeu(way.transform.position);
+        waypoints.addWaypoint(way);
+
+        way = new GameObject("Waypoint");
+        way.transform.parent = list;
+        way.transform.position = new Vector3(xMiddle + roadDecalage, 2, zMiddle + roadDecalage);
+        info = way.AddComponent<WaypointInformation>();
+        info.isCenter = true;
+        waypoints.addCenterWaypoint(way);
+        waypoints.addWaypoint(way);
+
+        way = new GameObject("Waypoint");
+        way.transform.parent = list;
+        way.transform.position = new Vector3(xMiddle + roadDecalage, 2, zMiddle + 30);
+        waypoints.addWaypoint(way);
+
+        way = new GameObject("Waypoint");
+        way.transform.parent = list;
+        way.transform.position = new Vector3(xMiddle - roadDecalage, 2, zMiddle + 30);
+        waypoints.addWaypoint(way);
+
+        way = new GameObject("Waypoint");
+        way.transform.parent = list;
+        way.transform.position = new Vector3(xMiddle - roadDecalage, 2, zMiddle + 30);
+        waypoints.addWaypoint(way);
+
+        way = new GameObject("Waypoint");
+        way.transform.parent = list;
+        way.transform.position = new Vector3(xMiddle - roadDecalage, 2, zMiddle + 13);
+        info = way.AddComponent<WaypointInformation>();
+        info.feu = getNearestFeu(way.transform.position);
+        waypoints.addWaypoint(way);
+
+        way = new GameObject("Waypoint");
+        way.transform.parent = list;
+        way.transform.position = new Vector3(xMiddle - roadDecalage, 2, zMiddle + roadDecalage);
+        info = way.AddComponent<WaypointInformation>();
+        info.isCenter = true;
+        waypoints.addCenterWaypoint(way);
+        waypoints.addWaypoint(way);
+
+        way = new GameObject("Waypoint");
+        way.transform.parent = list;
+        way.transform.position = new Vector3(xMiddle - 30, 2, zMiddle + roadDecalage);
+        waypoints.addWaypoint(way);
+
+        way = new GameObject("Waypoint");
+        way.transform.parent = list;
+        way.transform.position = new Vector3(xMiddle - 30, 2, zMiddle - roadDecalage);
+        waypoints.addWaypoint(way);
+
+        way = new GameObject("Waypoint");
+        way.transform.parent = list;
+        way.transform.position = new Vector3(xMiddle - 13, 2, zMiddle - roadDecalage);
+        info = way.AddComponent<WaypointInformation>();
+        info.feu = getNearestFeu(way.transform.position);
+        waypoints.addWaypoint(way);
+
+        way = new GameObject("Waypoint");
+        way.transform.parent = list;
+        way.transform.position = new Vector3(xMiddle - roadDecalage, 2, zMiddle - roadDecalage);
+        info = way.AddComponent<WaypointInformation>();
+        info.isCenter = true;
+        waypoints.addCenterWaypoint(way);
+        waypoints.addWaypoint(way);
+
+        way = new GameObject("Waypoint");
+        way.transform.parent = list;
+        way.transform.position = new Vector3(xMiddle - roadDecalage, 2, zMiddle - 30);
+        waypoints.addWaypoint(way);
+
+        way = new GameObject("Waypoint");
+        way.transform.parent = list;
+        way.transform.position = new Vector3(xMiddle + roadDecalage, 2, zMiddle - 30);
+        waypoints.addWaypoint(way);
+
+        way = new GameObject("Waypoint");
+        way.transform.parent = list;
+        way.transform.position = new Vector3(xMiddle + roadDecalage, 2, zMiddle - 13);
+                info = way.AddComponent<WaypointInformation>();
+        info.feu = getNearestFeu(way.transform.position);
+        waypoints.addWaypoint(way);
+
+        way = new GameObject("Waypoint");
+        way.transform.parent = list;
+        way.transform.position = new Vector3(xMiddle + roadDecalage, 2, zMiddle - roadDecalage);
+        info = way.AddComponent<WaypointInformation>();
+        info.isCenter = true;
+        waypoints.addCenterWaypoint(way);
+        waypoints.addWaypoint(way);
+
+        way = new GameObject("Waypoint");
+        way.transform.parent = list;
+        way.transform.position = new Vector3(xMiddle + 30, 2, zMiddle - roadDecalage);
+        waypoints.addWaypoint(way);
+    }
 
 }
