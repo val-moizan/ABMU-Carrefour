@@ -28,6 +28,11 @@ public class Waypoints : MonoBehaviour
     {
         centerWaypoints.Add(ob);
     }
+    public List<GameObject> getAllWaypoints()
+    {
+        return allWaypoints;
+    }
+
     public GameObject GetNextWaypoint(GameObject currentWaypoint) {
         if (currentWaypoint == null) return allWaypoints[0];
 
@@ -43,7 +48,16 @@ public class Waypoints : MonoBehaviour
                 return allWaypoints[currentIndex >= waypointSize - 1 ? 0 : currentIndex + 1]; //on va au prochain
             }
             previousWaypoint = currentWaypoint;
-            return randomWaypointExcept(centerWaypoints, currentWaypoint); //on va aléatoirement à un autre waypoint du centre
+            int r = Random.Range(0, 3);
+            if(r < 2)
+            {
+                return randomWaypointExcept(centerWaypoints, currentWaypoint); //on va aléatoirement à un autre waypoint du centre
+            }
+            else
+            {
+                return allWaypoints[currentIndex >= waypointSize - 1 ? 0 : currentIndex + 1]; //on va à droite
+            }
+ 
         }
         previousWaypoint = currentWaypoint;
         return allWaypoints[currentIndex >= waypointSize - 1 ? 0 : currentIndex + 1];  //on va au prochain
@@ -55,7 +69,7 @@ public class Waypoints : MonoBehaviour
     private GameObject randomWaypointExcept(List<GameObject> waypoints, GameObject ob)
     {
         GameObject ret = null;
-        while(ret == null || ret == ob)
+        while(ret == null || ret == ob || (ret.transform.position.x != ob.transform.position.x & ret.transform.position.z != ob.transform.position.z)) //on enleve le tournant à gauche
         {
             ret = waypoints[Random.Range(0, waypoints.Count)];
         }

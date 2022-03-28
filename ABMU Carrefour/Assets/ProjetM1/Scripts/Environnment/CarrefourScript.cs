@@ -7,9 +7,6 @@ using UnityEngine.AI;
 using System.Linq;
 public class CarrefourScript : MonoBehaviour
 {
-    Controller nCont;
-    Renderer floorRenderer;
-    Bounds bounds;
     int timer = 0;
     public int delay = 2000;
     void OnValidate()
@@ -18,7 +15,6 @@ public class CarrefourScript : MonoBehaviour
     }
     void Start()
     {
-        nCont = GameObject.FindObjectOfType<Controller>();
         timer = delay-1;
         generateWaypoints();
     }

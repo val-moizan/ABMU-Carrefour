@@ -96,7 +96,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 3, y: 4, z: 5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!195 &1236042029591761415
 NavMeshAgent:
@@ -119,7 +119,7 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 0
 --- !u!114 &2879368093176455438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,7 +132,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19efd9a399163b647a661717ea028599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isNearTarget: 0
+  currentWaypoint: {fileID: 0}
+  nextWaypoint: {fileID: 0}
   transparent: {fileID: 2100000, guid: 271a3316917d87245bbc01414b3323f3, type: 2}
 --- !u!1 &6727119701332035206
 GameObject:

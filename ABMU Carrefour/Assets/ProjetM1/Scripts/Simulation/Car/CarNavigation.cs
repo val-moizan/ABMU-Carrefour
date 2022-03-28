@@ -10,7 +10,7 @@ public class CarNavigation : AbstractAgent {
     //public GameObject targetObject;
     GameObject cube, cube2;
     Waypoints waypoints;
-    private GameObject currentWaypoint, nextWaypoint;
+    public GameObject currentWaypoint, nextWaypoint;
     public Material transparent;
     private bool isStoped = false;
     public override void Init() {
@@ -18,15 +18,36 @@ public class CarNavigation : AbstractAgent {
         cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
         Renderer cubeRenderer = cube.GetComponent<Renderer>();
         cubeRenderer.material = transparent;
-        cube.transform.localScale = new Vector3(3f, 3, 6f);
+        cube.transform.localScale = new Vector3(3f, 3, 3f);
 
         cube2 = GameObject.CreatePrimitive(PrimitiveType.Cube);
         Renderer cubeRenderer2 = cube2.GetComponent<Renderer>();
         cubeRenderer2.material = transparent;
+
         waypoints = GameObject.FindGameObjectWithTag("CarWaypoints").GetComponent<Waypoints>();
         nmAgent = GetComponent<NavMeshAgent>();
+
         currentWaypoint = waypoints.getRandomWaypoint();
 
+      /*  cube2.transform.position = currentWaypoint.transform.position;
+        if(detect(cube2, false, true)) //detect voiture au waypoint
+        {
+            Debug.Log("keke");
+            currentWaypoint = null;
+            foreach (GameObject ob in waypoints.getAllWaypoints())
+            {
+                cube2.transform.position = currentWaypoint.transform.position;
+                if (!detect(cube2, false, true))
+                {
+                    currentWaypoint = ob;
+                }
+            }
+        }
+        if(currentWaypoint == null) //aucun waypoint de dispo
+        {
+            Destroy(this);
+            return;
+        }*/
 
         transform.position = currentWaypoint.transform.position; // positionne la voiture sur le 1er waypoint
         Quaternion angleToNextWaypoint = Quaternion.LookRotation((waypoints.GetNextWaypoint(currentWaypoint).transform.position - this.transform.position).normalized);
@@ -47,16 +68,20 @@ public class CarNavigation : AbstractAgent {
     void checkInFront()
     {
 
-        cube.transform.position = AgentNavigation.addRotationToVec(this.transform.position, this.transform.rotation.eulerAngles.y, 6, false);
+        cube.transform.position = AgentNavigation.addRotationToVec(this.transform.position, this.transform.rotation.eulerAngles.y, 3f, false);
         cube.transform.rotation = this.transform.rotation;
         Collider[] hitColliders = Physics.OverlapBox(cube.transform.position, cube.transform.localScale / 2, Quaternion.identity, 1);
         foreach(Collider col in hitColliders) //détecte les objets devant
         {
-            if(col.transform != this.transform && col.transform.GetComponent<CarNavigation>() != null) //voiture présente
+            if(col.transform != this.transform) 
             {
-                isStoped = true;
-                nmAgent.isStopped = true;
-                return;
+                if(col.transform.GetComponent<CarNavigation>() != null || col.transform.GetComponent<AgentNavigation>() != null) //voiture ou piéton présent
+                {
+                    isStoped = true;
+                    nmAgent.isStopped = true;
+                    return;
+                }
+
             }
         }
         if(isStoped && target != null) //il est stopé, mais a plus rien devant lui
@@ -66,7 +91,6 @@ public class CarNavigation : AbstractAgent {
     }
     void CheckDistToTarget()
     {
-
         float distX = this.transform.position.x - target.x;
         float distZ = this.transform.position.z - target.z;
         float distH = Mathf.Sqrt(distX * distX + distZ * distZ);
@@ -105,7 +129,7 @@ public class CarNavigation : AbstractAgent {
                     float distance = 20;
                     if(Mathf.Abs(norma.z) > 0.8) //axis z
                     {
-                        if(nextWaypoint.transform.position.x != currentWaypoint.transform.position.x) //va a gauche ou fait demi rout
+                        if(nextWaypoint.transform.position.x != currentWaypoint.transform.position.x) //va a gauche ou fait demi tour
                         {
                             cube2.transform.position = new Vector3(nextWaypoint.transform.position.x, currentWaypoint.transform.position.y, nextWaypoint.transform.position.z);
                             cube2.transform.position = AgentNavigation.addRotationToVec(cube2.transform.position, transform.rotation.eulerAngles.y, distance / 4, false);
@@ -122,7 +146,7 @@ public class CarNavigation : AbstractAgent {
                     }
                     else
                     {
-                        if (nextWaypoint.transform.position.z != currentWaypoint.transform.position.z) //va a gauche ou fait demi rout
+                        if (nextWaypoint.transform.position.z != currentWaypoint.transform.position.z) //va a gauche ou fait demi tour
                         {
                             cube2.transform.position = new Vector3(nextWaypoint.transform.position.x, currentWaypoint.transform.position.y, nextWaypoint.transform.position.z);
                             cube2.transform.position = AgentNavigation.addRotationToVec(cube2.transform.position, transform.rotation.eulerAngles.y, distance / 4, false);
@@ -145,6 +169,23 @@ public class CarNavigation : AbstractAgent {
 
         SetNewTarget();
         DestroyStepper("Stay");
+    }
+
+    private bool detect(GameObject currCube, bool agents, bool cars)
+    {
+        Collider[] hitColliders = Physics.OverlapBox(currCube.transform.position, currCube.transform.localScale / 2, Quaternion.identity, 1);
+        foreach (Collider col in hitColliders) //détecte les objets dans le cube
+        {
+            if (cars && col.transform.GetComponent<CarNavigation>() != null) //voiture détéctée
+            {
+                return true;
+            }
+            else if (agents && col.transform.GetComponent<AgentNavigation>() != null) //agent détéctée
+            {
+                return true;
+            }
+        }
+        return false;
     }
     void SetNewTarget() {
         currentWaypoint = nextWaypoint;

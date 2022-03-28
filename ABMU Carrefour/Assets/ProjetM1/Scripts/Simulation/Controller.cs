@@ -71,11 +71,11 @@ public class Controller : AbstractController
     void createCars(){
         for (int i = 0; i < numCars; i++) {
             GameObject car = Instantiate(carPrefab);
-            NavMeshAgent nmAgent = car.GetComponent<NavMeshAgent>();
+         /*   NavMeshAgent nmAgent = car.GetComponent<NavMeshAgent>();
             GameObject random = GetRandomObject(roads);
             Vector3 point = GetRandomPointInObject(random, carPrefab);
             nmAgent.Warp(point);
-            car.transform.position = nmAgent.nextPosition;
+            car.transform.position = nmAgent.nextPosition;*/
             car.GetComponent<CarNavigation>().Init();
         }
     }
