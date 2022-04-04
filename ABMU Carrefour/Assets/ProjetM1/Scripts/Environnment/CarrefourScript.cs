@@ -9,9 +9,10 @@ public class CarrefourScript : MonoBehaviour
 {
     int timer = 0;
     public int delay = 2000;
+    List<Vector3> debugW = new List<Vector3>();
     void OnValidate()
     {
-        delay = Mathf.Max(delay, 1000);
+        delay = Mathf.Max(delay, 2000);
     }
     void Start()
     {
@@ -31,6 +32,24 @@ public class CarrefourScript : MonoBehaviour
         
         
     }
+
+    private void OnDrawGizmos()
+    {
+        for (int i = 0; i < debugW.Count; i++)
+        {
+            Vector3 t = debugW[i];
+            Gizmos.color = Color.cyan;
+            if(i == 0)
+            {
+                Gizmos.color = Color.green;
+            }else if(i == debugW.Count - 1)
+            {
+                Gizmos.color = Color.red;
+            }
+            Gizmos.DrawSphere(t, 0.5f);
+
+        }
+    }
     /// <param name="start">Point de départ</param>
     /// <param name="end">Point d'arrivé</param>
     /// <returns>Retourne les waypoints par lequel le piéton devra passer</returns>
@@ -38,14 +57,17 @@ public class CarrefourScript : MonoBehaviour
         Vector3 middle = this.transform.position;
         bool crossX = shouldCrossAxis(start.x, end.x, middle.x);
         bool crossZ = shouldCrossAxis(start.z, end.z, middle.z);
-
+        debugW.Clear();
+        debugW.Add(start);
         if (crossX){
             Vector3 from = getRelativeVector(start);
             
             GameObject pass = getNearestObject(start, GameObject.FindGameObjectsWithTag("PassPietX"));
             KeyValuePair<Vector3, Vector3> vecs = getWaypointsNearPass(pass, from, true);
-            manager.addAction(new Action(pass, vecs.Key, vecs.Value));
-
+            manager.addAction(new Action(pass, vecs.Key, vecs.Value));//point au début de passage piéton (il devra verif avant de passer au prochain)
+            manager.addAction(new Action(null, vecs.Value, Vector3.zero)); //point après le passage piéton (pas besoin de verif avant de passer ua prochain)
+            debugW.Add(vecs.Key);
+            debugW.Add(vecs.Value);
             start = vecs.Value; //update la prochaine position après le passage piéton pour la suite
         }
         if (crossZ){
@@ -53,16 +75,22 @@ public class CarrefourScript : MonoBehaviour
 
             GameObject pass = getNearestObject(start, GameObject.FindGameObjectsWithTag("PassPietZ"));
             KeyValuePair<Vector3, Vector3> vecs = getWaypointsNearPass(pass, from, false);
-            manager.addAction(new Action(pass, vecs.Key, vecs.Value));
+            manager.addAction(new Action(pass, vecs.Key, vecs.Value)); //point au début de passage piéton (il devra verif avant de passer au prochain)
+            manager.addAction(new Action(null, vecs.Value, Vector3.zero)); //point après le passage piéton (pas besoin de verif avant de passer ua prochain)
+            debugW.Add(vecs.Key);
+            debugW.Add(vecs.Value);
         }
+        debugW.Add(end);
         manager.addAction(new Action(null, end, Vector3.zero));
 
     }
     /// <param name="from"></param>
-    /// <returns>Vecteur type (1, y , -1) correspondant aux coordonnées d'où il vient</returns>
+    /// <returns>Vecteur type (1, y , -1) correspondant aux coordonnées d'où il vient en fonction du centre du carrefour</returns>
     public Vector3 getRelativeVector(Vector3 from)
     {
-        return new Vector3(from.x / Mathf.Abs(from.x), from.y, from.z / Mathf.Abs(from.z));
+        float x = from.x - this.transform.position.x;
+        float z = from.z - this.transform.position.z;
+        return new Vector3(x / Mathf.Abs(x), from.y, z / Mathf.Abs(z));
     }
 
     /// <param name="pass">L'objet passage piéton</param>
@@ -100,7 +128,7 @@ public class CarrefourScript : MonoBehaviour
     {
         List<GameObject> array = new List<GameObject>(objs);
         array = array.OrderBy(o => Vector3.Distance(pos, o.transform.position)).ToList();
-        return array.Count == 0 ? null : (GameObject)array[0];
+        return array.Count == 0 ? null : array[0];
     }
     public FeuScript getNearestFeu(Vector3 pos)
     {
@@ -163,19 +191,22 @@ public class CarrefourScript : MonoBehaviour
         float roadDecalage = 2.5f;
         float xMiddle = transform.position.x;
         float zMiddle = transform.position.z;
-        GameObject way = new GameObject("Waypoint");
+        float feuDistance = 16;
+        float roadSize = 108;
+        GameObject way = new GameObject("Waypoint0");
         way.transform.parent = list;
-        way.transform.position = new Vector3(xMiddle + 30, 2, zMiddle + roadDecalage);
+        way.transform.position = new Vector3(xMiddle + roadSize, 2, zMiddle + roadDecalage);
+        way.AddComponent<WaypointInformation>();
         waypoints.addWaypoint(way);
 
-        way = new GameObject("Waypoint");
+        way = new GameObject("Waypoint1");
         way.transform.parent = list;
-        way.transform.position = new Vector3(xMiddle + 13, 2, zMiddle + roadDecalage);
+        way.transform.position = new Vector3(xMiddle + feuDistance, 2, zMiddle + roadDecalage);
         WaypointInformation info = way.AddComponent<WaypointInformation>();
         info.feu = getNearestFeu(way.transform.position);
         waypoints.addWaypoint(way);
 
-        way = new GameObject("Waypoint");
+        way = new GameObject("Waypoint2");
         way.transform.parent = list;
         way.transform.position = new Vector3(xMiddle + roadDecalage, 2, zMiddle + roadDecalage);
         info = way.AddComponent<WaypointInformation>();
@@ -183,29 +214,27 @@ public class CarrefourScript : MonoBehaviour
         waypoints.addCenterWaypoint(way);
         waypoints.addWaypoint(way);
 
-        way = new GameObject("Waypoint");
+        way = new GameObject("Waypoint3");
         way.transform.parent = list;
-        way.transform.position = new Vector3(xMiddle + roadDecalage, 2, zMiddle + 30);
+        way.transform.position = new Vector3(xMiddle + roadDecalage, 2, zMiddle + roadSize);
+        info = way.AddComponent<WaypointInformation>();
+        info.isOut = true;
         waypoints.addWaypoint(way);
 
-        way = new GameObject("Waypoint");
+        way = new GameObject("Waypoint4");
         way.transform.parent = list;
-        way.transform.position = new Vector3(xMiddle - roadDecalage, 2, zMiddle + 30);
+        way.transform.position = new Vector3(xMiddle - roadDecalage, 2, zMiddle + roadSize);
+        way.AddComponent<WaypointInformation>();
         waypoints.addWaypoint(way);
 
-        way = new GameObject("Waypoint");
+        way = new GameObject("Waypoint5");
         way.transform.parent = list;
-        way.transform.position = new Vector3(xMiddle - roadDecalage, 2, zMiddle + 30);
-        waypoints.addWaypoint(way);
-
-        way = new GameObject("Waypoint");
-        way.transform.parent = list;
-        way.transform.position = new Vector3(xMiddle - roadDecalage, 2, zMiddle + 13);
+        way.transform.position = new Vector3(xMiddle - roadDecalage, 2, zMiddle + feuDistance);
         info = way.AddComponent<WaypointInformation>();
         info.feu = getNearestFeu(way.transform.position);
         waypoints.addWaypoint(way);
 
-        way = new GameObject("Waypoint");
+        way = new GameObject("Waypoint6");
         way.transform.parent = list;
         way.transform.position = new Vector3(xMiddle - roadDecalage, 2, zMiddle + roadDecalage);
         info = way.AddComponent<WaypointInformation>();
@@ -213,24 +242,27 @@ public class CarrefourScript : MonoBehaviour
         waypoints.addCenterWaypoint(way);
         waypoints.addWaypoint(way);
 
-        way = new GameObject("Waypoint");
+        way = new GameObject("Waypoint7");
         way.transform.parent = list;
-        way.transform.position = new Vector3(xMiddle - 30, 2, zMiddle + roadDecalage);
+        way.transform.position = new Vector3(xMiddle - roadSize, 2, zMiddle + roadDecalage);
+        info = way.AddComponent<WaypointInformation>();
+        info.isOut = true;
         waypoints.addWaypoint(way);
 
-        way = new GameObject("Waypoint");
+        way = new GameObject("Waypoint8");
         way.transform.parent = list;
-        way.transform.position = new Vector3(xMiddle - 30, 2, zMiddle - roadDecalage);
+        way.transform.position = new Vector3(xMiddle - roadSize, 2, zMiddle - roadDecalage);
+        way.AddComponent<WaypointInformation>();
         waypoints.addWaypoint(way);
 
-        way = new GameObject("Waypoint");
+        way = new GameObject("Waypoint9");
         way.transform.parent = list;
-        way.transform.position = new Vector3(xMiddle - 13, 2, zMiddle - roadDecalage);
+        way.transform.position = new Vector3(xMiddle - feuDistance, 2, zMiddle - roadDecalage);
         info = way.AddComponent<WaypointInformation>();
         info.feu = getNearestFeu(way.transform.position);
         waypoints.addWaypoint(way);
 
-        way = new GameObject("Waypoint");
+        way = new GameObject("Waypoint10");
         way.transform.parent = list;
         way.transform.position = new Vector3(xMiddle - roadDecalage, 2, zMiddle - roadDecalage);
         info = way.AddComponent<WaypointInformation>();
@@ -238,24 +270,27 @@ public class CarrefourScript : MonoBehaviour
         waypoints.addCenterWaypoint(way);
         waypoints.addWaypoint(way);
 
-        way = new GameObject("Waypoint");
+        way = new GameObject("Waypoint11");
         way.transform.parent = list;
-        way.transform.position = new Vector3(xMiddle - roadDecalage, 2, zMiddle - 30);
+        way.transform.position = new Vector3(xMiddle - roadDecalage, 2, zMiddle - roadSize);
+        info = way.AddComponent<WaypointInformation>();
+        info.isOut = true;
         waypoints.addWaypoint(way);
 
-        way = new GameObject("Waypoint");
+        way = new GameObject("Waypoint12");
         way.transform.parent = list;
-        way.transform.position = new Vector3(xMiddle + roadDecalage, 2, zMiddle - 30);
+        way.transform.position = new Vector3(xMiddle + roadDecalage, 2, zMiddle - roadSize);
+        way.AddComponent<WaypointInformation>();
         waypoints.addWaypoint(way);
 
-        way = new GameObject("Waypoint");
+        way = new GameObject("Waypoint13");
         way.transform.parent = list;
-        way.transform.position = new Vector3(xMiddle + roadDecalage, 2, zMiddle - 13);
+        way.transform.position = new Vector3(xMiddle + roadDecalage, 2, zMiddle - feuDistance);
                 info = way.AddComponent<WaypointInformation>();
         info.feu = getNearestFeu(way.transform.position);
         waypoints.addWaypoint(way);
 
-        way = new GameObject("Waypoint");
+        way = new GameObject("Waypoint14");
         way.transform.parent = list;
         way.transform.position = new Vector3(xMiddle + roadDecalage, 2, zMiddle - roadDecalage);
         info = way.AddComponent<WaypointInformation>();
@@ -263,9 +298,11 @@ public class CarrefourScript : MonoBehaviour
         waypoints.addCenterWaypoint(way);
         waypoints.addWaypoint(way);
 
-        way = new GameObject("Waypoint");
+        way = new GameObject("Waypoint15");
         way.transform.parent = list;
-        way.transform.position = new Vector3(xMiddle + 30, 2, zMiddle - roadDecalage);
+        way.transform.position = new Vector3(xMiddle + roadSize, 2, zMiddle - roadDecalage);
+        info = way.AddComponent<WaypointInformation>();
+        info.isOut = true;
         waypoints.addWaypoint(way);
     }
 

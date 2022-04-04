@@ -15,7 +15,7 @@ public class TexturesScript : MonoBehaviour{
         if (angle > 180)  
             angle -= 360;
     
-        if(Mathf.Abs(transform.eulerAngles.y) >= 45 && Mathf.Abs(transform.eulerAngles.y) <= 135){//direction Z
+        if(Mathf.Abs(angle) >= 45 && Mathf.Abs(angle) <= 135){//direction Z
             float temp = sizeX;
             sizeX = sizeZ;
             sizeZ = temp;

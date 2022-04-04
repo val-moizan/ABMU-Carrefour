@@ -8,16 +8,19 @@ using ABMU;
 using UnityEngine.AI;
 
 using UnityEditor;
+using System.Linq;
 
 public class Controller : AbstractController
 {
-    public GameObject agentPrefab, carPrefab, waypointPrefab;
-    public int numAgents = 10, numCars = 10;
+    public GameObject agentPrefab, carPrefab;
+    public int numAgents = 10, numCars = 2;
 
     [Header("Agent Parameters")]
     public float distToTargetThreshold = 2f;
     [Range(1, 100)]
     public float thugProbability = 10;
+    [Range(1, 100)]
+    public float viewDistance = 20;
 
     private List<GameObject> roads, sidewalks;
 
@@ -29,12 +32,10 @@ public class Controller : AbstractController
         createCars();
 
     }
-    void Update(){
-
-    }
     void createAgents(){
         for (int i = 0; i < numAgents; i++) {
             GameObject agent = Instantiate(agentPrefab);
+            agent.name = "Agent " + i;
             if (pov)
             {
                 addCamToAgent(agent);
@@ -69,14 +70,32 @@ public class Controller : AbstractController
         }
     }
     void createCars(){
+       
+        List<Waypoints> allList = new List<Waypoints>(FindObjectsOfType<Waypoints>()); //liste de toutes les liste de waypoint
+        List<GameObject> array = new List<GameObject>();
+        foreach (Waypoints waypoints in allList)
+        {
+            List<GameObject> list = new List<GameObject>(waypoints.getAllWaypoints());
+            list = list.Where(x => !waypoints.getCenterWaypoints().Contains(x)).ToList(); //on retire les waypoint centraux et ceux pour sortir
+            array.AddRange(list);
+        }
+        
+
         for (int i = 0; i < numCars; i++) {
+
             GameObject car = Instantiate(carPrefab);
-         /*   NavMeshAgent nmAgent = car.GetComponent<NavMeshAgent>();
-            GameObject random = GetRandomObject(roads);
-            Vector3 point = GetRandomPointInObject(random, carPrefab);
-            nmAgent.Warp(point);
-            car.transform.position = nmAgent.nextPosition;*/
-            car.GetComponent<CarNavigation>().Init();
+            car.name = "Car " + i;
+            CarNavigation nav = car.GetComponent<CarNavigation>();
+
+            int lenght = array.Count;
+            int index = Random.Range(0, lenght);
+            nav.Init();
+            nav.setStartWaypoint(array[index]);
+            array.RemoveAt(index);
+            if (lenght <= 1)
+            {
+                break;
+            }
         }
     }
 
@@ -107,27 +126,5 @@ public class Controller : AbstractController
     }
     public List<GameObject> GetAllSidewalks(){
         return new List<GameObject>(GameObject.FindGameObjectsWithTag("walkable"));
-    }
-
-    //TODO: delete
-    public void addWaypoint(string index, Vector3 pos)
-    {
-        GameObject ob = Instantiate(waypointPrefab);
-        ob.transform.position = pos;
-        TextMesh t = ob.AddComponent<TextMesh>();
-        t.text = index;
-        t.fontSize = 30;
-        t.transform.localEulerAngles += new Vector3(90, 0, 0);
-        t.color = new Color(1, 0, 0);
-    }
-    //TODO: delete
-    public void clearAllWaypoints()
-    {
-        GameObject[] objs = GameObject.FindGameObjectsWithTag("waypoint");
-        foreach (GameObject ob in objs)
-        {
-            Destroy(ob);
-        }
-
     }
 }

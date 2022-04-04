@@ -28,5 +28,9 @@ public class ActionManager
     {
         this.actions.RemoveAt(0);
     }
+    public void clearAllActions()
+    {
+        this.actions.Clear();
+    }
 
 }

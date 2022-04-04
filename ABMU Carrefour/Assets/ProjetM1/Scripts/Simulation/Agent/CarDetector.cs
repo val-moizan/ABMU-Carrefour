@@ -5,12 +5,6 @@ using UnityEngine.AI;
 
 public class CarDetector : MonoBehaviour
 {
-    public GameObject agent;
-    Controller nCont;
-    void Start()
-    {
-        nCont = GameObject.FindObjectOfType<Controller>();
-    }
     /// <summary>
     /// Detect les voitures dans le cube
     /// </summary>
@@ -32,14 +26,15 @@ public class CarDetector : MonoBehaviour
         }
         return results;
     }
-
+    /// <param name="passPos">Position du passage piéton</param>
+    /// <returns>true si des voitures sont en approche</returns>
     public bool carsAreComing(Vector3 passPos)
     {
-        List<Transform> list = detectAllCars();
+        List<Transform> list = detectAllCars(); //récupère toutes les voitures présentent dans le cube
         foreach (Transform trans in list)
         {
-            Quaternion angleToPassPieton = Quaternion.LookRotation((passPos - trans.position).normalized);
-            float angleDiff = Quaternion.Angle(angleToPassPieton, trans.rotation);
+            Quaternion angleToPassPieton = Quaternion.LookRotation((passPos - trans.position).normalized); //angle pour regarder le passage piéton
+            float angleDiff = Quaternion.Angle(angleToPassPieton, trans.rotation); //différence avec l'angle de la voiture
             if (angleDiff < 90)
             {
                 return true;

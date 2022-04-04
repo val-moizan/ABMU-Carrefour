@@ -70,7 +70,7 @@ public class FeuScript : MonoBehaviour
             walkLight.color = new Color(1, 0, 0);
         }
         isWalkLightred = true;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
         isLightRed = false;
         red.intensity = 0;
         orange.intensity = 0;
