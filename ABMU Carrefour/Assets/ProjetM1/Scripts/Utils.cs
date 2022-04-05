@@ -36,12 +36,12 @@ public class Utils
     /// Fonctions utilisé pour la détéction d'objets 
     /// </summary>
     /// <param name="center">point central</param>
-    /// <param name="extend">extand du box</param>
+    /// <param name="extend">taille du cube de detection</param>
     /// <param name="except">exception dans la detection</param>
-    /// <param name="agents">verif si agents présent?</param>
-    /// <param name="cars">verif si cars présent?</param>
+    /// <param name="agents">verif si pietons présent?</param>
+    /// <param name="cars">verif si voitures présent?</param>
     /// <param name="checkMovements">verif si objets en mouvement?</param>
-    /// <returns>true if detected</returns>
+    /// <returns>true si détécté</returns>
     public static bool detect(Vector3 center, Vector3 extend, GameObject except, bool agents, bool cars, bool checkMovements)
     {
         Collider[] hitColliders = Physics.OverlapBox(center, extend / 2, Quaternion.identity, 1);
@@ -84,10 +84,10 @@ public class Utils
         }
         return false;
     }
+
     /// <summary>
-    /// same as detect mais verif si la voiture ne tourne pas à droite
+    /// Detect cars, verif si la voiture ne tourne pas à droite
     /// </summary>
-    /// <returns></returns>
     public static bool detectNonTurningCars(Vector3 center, Vector3 extend, GameObject except)
     {
         Collider[] hitColliders = Physics.OverlapBox(center, extend / 2, Quaternion.identity, 1);
@@ -97,7 +97,8 @@ public class Utils
 
             if (col.transform.GetComponent<CarNavigation>() != null) //voiture détéctée
             {
-                if(!col.transform.GetComponent<CarNavigation>().turningRight && !col.transform.GetComponent<CarNavigation>().turningLeft && !col.transform.GetComponent<CarNavigation>().isStoped)
+                //ignore les voitures qui tournent et qui sont à l'arrêt
+                if (!col.transform.GetComponent<CarNavigation>().turningRight && !col.transform.GetComponent<CarNavigation>().turningLeft && !col.transform.GetComponent<CarNavigation>().isStoped)
                     return true;
             }
         }

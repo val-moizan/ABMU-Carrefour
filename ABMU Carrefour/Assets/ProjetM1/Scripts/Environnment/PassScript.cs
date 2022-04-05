@@ -12,14 +12,6 @@ public class PassScript : MonoBehaviour
     }
     private void Update()
     {
-        if (!containsPedestrians())
-        {
-          //  this.transform.Find("BaseCube").GetComponent<Renderer>().material.SetColor("_Color", new Color(0, 1, 0f));
-        }
-        else
-        {
-          //  this.transform.Find("BaseCube").GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 0, 0f));
-        }
     }
     public FeuScript getLight()
     {
@@ -60,7 +52,7 @@ public class PassScript : MonoBehaviour
     public bool containsCars()
     {
         Vector3 checkPos = this.transform.position;
-        checkPos.y += 1.5f;
+        checkPos.y += 1f;
         Collider[] hitColliders = Physics.OverlapBox(checkPos, this.transform.Find("BaseCube").localScale / 2, this.transform.Find("BaseCube").rotation, 1);
         foreach (Collider col in hitColliders) //détecte les objets au dessus du passage piéton
         {

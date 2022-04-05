@@ -297,7 +297,7 @@ public class AgentNavigation : AbstractAgent
         float distance = nCont.viewDistance;
         cube.transform.localScale = absVec(Utils.addRotationToVec(new Vector3(8, 2, 8), this.looking.eulerAngles.y + 90, distance * 2, true));//agrandit le cube en largeur perpendiculaire à la rotation du piéton
         cube.transform.position = Utils.addRotationToVec(this.transform.position, this.looking.eulerAngles.y, 6, false); //avance le cube sur la route en direction de la rotation du piéton
-        if (detector.carsAreComing(manager.getFirstAction().pass.transform.position))
+        if (detector.carsAreComing(manager.getFirstAction().pass.transform.position) && !manager.getFirstAction().pass.GetComponent<PassScript>().containsCars())
         {
             Destroy(cube);
             return true;

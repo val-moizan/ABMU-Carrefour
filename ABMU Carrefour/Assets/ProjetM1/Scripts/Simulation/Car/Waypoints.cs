@@ -56,7 +56,7 @@ public class Waypoints : MonoBehaviour
                 return new KeyValuePair<GameObject, bool>(allWaypoints[currentIndex >= waypointSize - 1 ? 0 : currentIndex + 1], false); //on va au prochain
             }
             int r = Random.Range(0, 3);
-            if(r < 2)
+            if(r < 1)
             {
                 return new KeyValuePair<GameObject, bool>(randomWaypointExcept(centerWaypoints, currentWaypoint), false); //on va aléatoirement à un autre waypoint du centre
             }

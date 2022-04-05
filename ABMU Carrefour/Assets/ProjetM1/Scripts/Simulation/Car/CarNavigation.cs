@@ -33,11 +33,12 @@ public class CarNavigation : AbstractAgent {
         string side = turningLeft ? "L" : (turningRight ? "R" : "");
         if(side.Equals("")) return;
         ticks++;
-        if(ticks == 100)
+        float clignSpeed = 100;
+        if(ticks == clignSpeed / 2)
         {
             updateClignotant(side, true);
         }
-        else if(ticks > 200)
+        else if(ticks > clignSpeed)
         {
             updateClignotant(side, false);
             ticks = 0;

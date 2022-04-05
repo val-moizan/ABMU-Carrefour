@@ -46,7 +46,7 @@ public class CarrefourScript : MonoBehaviour
             {
                 Gizmos.color = Color.red;
             }
-            Gizmos.DrawSphere(t, 0.5f);
+          //  Gizmos.DrawSphere(t, 0.5f);
 
         }
     }
